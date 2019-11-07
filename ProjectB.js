@@ -73,6 +73,7 @@ function main() {
     return;
   }
   //  
+  document.onkeydown = function(ev){ keydown1(ev); };
   var n = initVertexBuffer(gl);
   if (n < 0) {
     console.log('Failed to set the vertex information');
@@ -1254,12 +1255,13 @@ function myKeyDown(kev) {
 	}
 }
 
-function keydown1() {
+function keydown1(ev) {
 //------------------------------------------------------
 //HTML calls this'Event handler' or 'callback function' when we press a key:
 
     if(ev.keyCode == 39) { // The right arrow key was pressed
 //      g_EyeX += 0.01;
+				console.log("test")
 				g_EyeX += 0.1;		// INCREASED for perspective camera)
     } else 
     if (ev.keyCode == 37) { // The left arrow key was pressed
