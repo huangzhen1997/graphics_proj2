@@ -55,11 +55,12 @@ function main() {
    window.addEventListener("mouseup", myMouseUp);	
 	window.addEventListener("click", myMouseClick);				
 	window.addEventListener("dblclick", myMouseDblClick);
-	document.onkeydown= function(ev){keydown1(); };
+	
   // Retrieve <canvas> element
   var myCanvas = document.getElementById('webgl');
 	canvas = myCanvas;	// make it global--for everyone to use.
   // Get the rendering context for WebGL
+  document.onkeydown= function(ev){keydown(); };
   var myGL = getWebGLContext(canvas);
   if (!myGL) {
     console.log('Failed to get the rendering context for WebGL');
@@ -1254,7 +1255,7 @@ function myKeyDown(kev) {
 	}
 }
 
-function keydown1() {
+function keydown() {
 //------------------------------------------------------
 //HTML calls this'Event handler' or 'callback function' when we press a key:
 
