@@ -87,7 +87,7 @@ function main() {
 	// NEW!! Enable 3D depth-test when drawing: don't over-draw at any pixel 
 	// unless the new Z value is closer to the eye than the old one..
 //	gl.depthFunc(gl.LESS);			 // WebGL default setting: (default)
-	gl.enable(gl.DEPTH_TEST); 	  
+	// gl.enable(gl.DEPTH_TEST); 	  
 	
   // Get handle to graphics system's storage location of u_ModelMatrix
   u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
@@ -102,8 +102,13 @@ function main() {
 }
 
 function tick(){
+	var nuCanvas = document.getElementById('webgl');	// get current canvas
+	nuCanvas.width = innerWidth;
+	nuCanvas.height = innerHeight*3/4;
+	var nuGL = getWebGLContext(nuCanvas);	
+
     animate();  // Update the rotation angle
-    drawAll();   // Draw shapes
+    drawAll(nuGL);   // Draw shapes
 	document.getElementById('CurAngleDisplay').innerHTML= 
 			'g_angle01= '+g_angle01.toFixed(5);
 	document.getElementById('CurAngleDisplay_2').innerHTML= 
@@ -856,13 +861,25 @@ function makeGroundGrid() {
 	}
 }
 
-function drawAll(){
+function drawAll(gl){
 //==============================================================================
   // Clear <canvas>  colors AND the depth buffer
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  console.log(gl.drawingBufferWidth);
+  gl.viewport(0,											 				// Viewport lower-left corner
+							0, 			// location(in pixels)
+  						gl.drawingBufferWidth, 					// viewport width,
+  						gl.drawingBufferHeight);			// viewport height in pixels.
+
+  var vpAspect = gl.drawingBufferWidth /			// On-screen aspect ratio for
+								(gl.drawingBufferHeight);		// this camera: width/height.
+
+
+
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.perspective(42.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
+  modelMatrix.setPerspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+                           vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 						
