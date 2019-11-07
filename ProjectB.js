@@ -60,7 +60,7 @@ function main() {
   var myCanvas = document.getElementById('webgl');
 	canvas = myCanvas;	// make it global--for everyone to use.
   // Get the rendering context for WebGL
-  document.onkeydown= function(ev){keydown(); };
+  document.onkeydown= function(ev){keydown(ev); };
   var myGL = getWebGLContext(canvas);
   if (!myGL) {
     console.log('Failed to get the rendering context for WebGL');
@@ -74,7 +74,7 @@ function main() {
     return;
   }
   //  
-  document.onkeydown = function(ev){ keydown1(ev); };
+
   var n = initVertexBuffer(gl);
   if (n < 0) {
     console.log('Failed to set the vertex information');
@@ -1256,11 +1256,8 @@ function myKeyDown(kev) {
 	}
 }
 
-<<<<<<< HEAD
-function keydown1(ev) {
-=======
-function keydown() {
->>>>>>> fde25689285f0cd6815722ca003d8ebbf0616095
+
+function keydown(ev) {
 //------------------------------------------------------
 //HTML calls this'Event handler' or 'callback function' when we press a key:
 
