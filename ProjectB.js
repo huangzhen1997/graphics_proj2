@@ -811,9 +811,9 @@ function makeGroundGrid() {
 
 	var xcount = 100;			// # of lines to draw in x,y to make the grid.
 	var ycount = 100;		
-	var xymax	= 50.0;			// grid size; extends to cover +/-xymax in x and y.
- 	var xColr = new Float32Array([1.0, 1.0, 0.3]);	// bright yellow
- 	var yColr = new Float32Array([0.5, 1.0, 0.5]);	// bright green.
+	var xymax	= 100.0;			// grid size; extends to cover +/-xymax in x and y.
+ 	var xColr = new Float32Array([1.0, 1.0, 0.0]);	// bright yellow
+ 	var yColr = new Float32Array([0.0, 1.0, 0.0]);	// bright green.
  	
 	// Create an (global) array to hold this ground-plane's vertices:
 	gndVerts = new Float32Array(floatsPerVertex*2*(xcount+ycount));
@@ -873,12 +873,12 @@ function drawAll(gl){
   						gl.drawingBufferHeight);			// viewport height in pixels.
 
   var vpAspect = gl.drawingBufferWidth /			// On-screen aspect ratio for
-								(gl.drawingBufferHeight);		// this camera: width/height.
+								gl.drawingBufferHeight;		// this camera: width/height.
 
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.setPerspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+  modelMatrix.perspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
@@ -889,7 +889,7 @@ function drawAll(gl){
 					  
        // SAVE world coord system;
     modelMatrix.translate( 0.4, -0.4, 0.0);	
-  	modelMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
+  	modelMatrix.scale(0.7, 0.7, 0.7);				// shrink by 10X:
 	
 	drawGrid();	
 	
@@ -1280,13 +1280,20 @@ function keydown(ev) {
 
     if(ev.keyCode == 39) { // The right arrow key was pressed
 //      g_EyeX += 0.01;
-				console.log("test")
-				g_EyeX += 0.1;		// INCREASED for perspective camera)
+				g_EyeX -= 1;		// INCREASED for perspective camera)
     } else 
     if (ev.keyCode == 37) { // The left arrow key was pressed
 //      g_EyeX -= 0.01;
-				g_EyeX -= 0.1;		// INCREASED for perspective camera)
-    } else { return; } // Prevent the unnecessary drawing
+				g_EyeX += 1;		// INCREASED for perspective camera)
+    }
+    if(ev.KeyCode=38){
+    	g_EyeZ-=1;
+    }
+    if(ev.KeyCode=40){
+    	g_EyeZ+=1;
+    }
+
+     else { return; } // Prevent the unnecessary drawing
     drawAll();    
 }
 
