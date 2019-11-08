@@ -1,11 +1,12 @@
 // Vertex shader program----------------------------------
 var VSHADER_SOURCE =
-  'uniform mat4 u_ModelMatrix;\n' +
+  'uniform mat4 u_ProjMatrix;\n' +
+  'uniform mat4 u_ViewMatrix;\n' +
   'attribute vec4 a_Position;\n' +
   'attribute vec4 a_Color;\n' +
   'varying vec4 v_Color;\n' +
   'void main() {\n' +
-  '  gl_Position = u_ModelMatrix * a_Position;\n' +
+  '  gl_Position = u_ProjMatrix * u_ViewMatrix * a_Position;\n' +
   '  gl_PointSize = 10.0;\n' +
   '  v_Color = a_Color;\n' +
   '}\n';
@@ -26,7 +27,6 @@ var gl;				// main() sets this to the rendering context for WebGL. This object
 // holds ALL webGL functions as its members; I make it global here because we
 // nearly all our program's functions need it to make WebGL calls.  All those
 // functions would need 'gl' as an argument if we didn't make it a global var.
-var u_ModelMatrix;     // **GPU location** of the 'u_ModelMatrix' uniform
 var ANGLE_STEP = 45.0;		// Rotation angle rate (degrees/second)
 var ANGLE_STEP_2 = 20.0;   // A different Rotation angle rate (degrees/second)
 var floatsPerVertex = 7;	// # of Float32Array elements used for each vertex
@@ -36,7 +36,7 @@ var floatsPerVertex = 7;	// # of Float32Array elements used for each vertex
 var g_angle01 = 0.0;        // animation angle 01 (degrees)
 var g_angle02 = 0.0;        // animation angle 02 (degrees)
 var g_last = Date.now();
-var modelMatrix = new Matrix4();
+
 
 	//------------For mouse click-and-drag: -------------------------------
 var g_isDrag=false;		// mouse-drag: true when user holds down mouse button
@@ -53,14 +53,14 @@ function main() {
    window.addEventListener("mousedown", myMouseDown);
    window.addEventListener("mousemove", myMouseMove);
    window.addEventListener("mouseup", myMouseUp);
-	window.addEventListener("click", myMouseClick);
-	window.addEventListener("dblclick", myMouseDblClick);
+   window.addEventListener("click", myMouseClick);
+   window.addEventListener("dblclick", myMouseDblClick);
 
   // Retrieve <canvas> element
   var myCanvas = document.getElementById('webgl');
 	canvas = myCanvas;	// make it global--for everyone to use.
   // Get the rendering context for WebGL
-  document.onkeydown= function(ev){keydown(ev); };
+  
   var myGL = getWebGLContext(canvas);
   if (!myGL) {
     console.log('Failed to get the rendering context for WebGL');
@@ -87,28 +87,35 @@ function main() {
 	// NEW!! Enable 3D depth-test when drawing: don't over-draw at any pixel
 	// unless the new Z value is closer to the eye than the old one..
 //	gl.depthFunc(gl.LESS);			 // WebGL default setting: (default)
-	 gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.DEPTH_TEST);
 
-  // Get handle to graphics system's storage location of u_ModelMatrix
-  u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
-  if (!u_ModelMatrix) {
-    console.log('Failed to get the storage location of u_ModelMatrix');
+  // Get handle to graphics system's storage location of u_ProjMatrix
+  var u_ProjMatrix = gl.getUniformLocation(gl.program, 'u_ProjMatrix');
+  var u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
+
+
+  if (!u_ProjMatrix || !u_ViewMatrix) {
+    console.log('Failed to get the storage location of u_ProjMatrix or u_ViewMatrix');
     return;
   }
-//-----------------
 
-  tick();							// start (and continue) animation: draw current image
+  var projMatrix = new Matrix4();
+  var viewMatrix = new Matrix4();
+  document.onkeydown= function(ev){keydown(ev,gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix); };
+  gl.uniformMatrix4fv(u_ProjMatrix, false, projMatrix.elements);
+  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
+  
 
-}
 
-function tick(){
+
+  var tick = function() {
 	var nuCanvas = document.getElementById('webgl');	// get current canvas
 	nuCanvas.width = innerWidth;
 	nuCanvas.height = innerHeight*3/4;
 	var nuGL = getWebGLContext(nuCanvas);
 
     animate();  // Update the rotation angle
-    drawAll(nuGL);   // Draw shapes
+    drawAll(nuGL,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);   // Draw shapes
 	document.getElementById('CurAngleDisplay').innerHTML=
 			'g_angle01= '+g_angle01.toFixed(5);
 	document.getElementById('CurAngleDisplay_2').innerHTML=
@@ -122,6 +129,13 @@ function tick(){
     requestAnimationFrame(tick, canvas);
     									// Request that the browser re-draw the webpage
 }
+//-----------------
+
+  tick();							// start (and continue) animation: draw current image
+
+}
+
+
 
 function animate() {
 //==============================================================================
@@ -861,12 +875,13 @@ function makeGroundGrid() {
 	}
 }
 
-function drawAll(gl){
+function drawAll(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix){
 //==============================================================================
   // Clear <canvas>  colors AND the depth buffer
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   console.log(gl.drawingBufferWidth);
+
   gl.viewport(0,											 				// Viewport lower-left corner
 							0, 			// location(in pixels)
   						gl.drawingBufferWidth, 					// viewport width,
@@ -876,271 +891,269 @@ function drawAll(gl){
 								gl.drawingBufferHeight;		// this camera: width/height.
 
 
-
-  modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.perspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+  projMatrix.setIdentity();    // DEFINE 'world-space' coords.
+  projMatrix.perspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
-  modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+  viewMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      -1.0, -2.0, -0.5,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
        // SAVE world coord system;
-    modelMatrix.translate( 0.4, -0.4, 0.0);
-  	modelMatrix.scale(0.7, 0.7, 0.7);				// shrink by 10X:
+    projMatrix.translate( 0.4, -0.4, 0.0);
+  	projMatrix.scale(0.7, 0.7, 0.7);				// shrink by 10X:
 
-	drawGrid();
+	drawGrid(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
 
 //===================Draw FIRST OBJECT:
   //-------Draw lower Spinning Cylinder:
-    modelMatrix.scale(1/7,1/7,1/7);
-	modelMatrix.translate(-0.6,0.6, 0.0);
-	modelMatrix.scale(1.5, 1.5, 1.5);
-	//modelMatrix.rotate(90, 0, 1, 0);
-	//modelMatrix.rotate(g_angle01, 0,1,1);
+    projMatrix.scale(1/7,1/7,1/7);
+	projMatrix.translate(-0.6,0.6, 0.0);
+	projMatrix.scale(1.5, 1.5, 1.5);
+	//projMatrix.rotate(90, 0, 1, 0);
+	//projMatrix.rotate(g_angle01, 0,1,1);
 	// Drawing:
   // Pass our current matrix to the vertex shaders:
-    drawCylinder();
+    drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
 
   //===========================================================
   //
-	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	pushMatrix(projMatrix);  // SAVE world drawing coords.
 
-	modelMatrix.translate(0,0, 2.8);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(g_angle01, 0,0,1);
-	drawSphere();
+	projMatrix.translate(0,0, 2.8);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(g_angle01, 0,0,1);
+	drawSphere(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	pushMatrix(modelMatrix);
+	pushMatrix(projMatrix);
 
-    modelMatrix.translate(-3,0, 0);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(90, 0, 1, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+    projMatrix.translate(-3,0, 0);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(90, 0, 1, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	  	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
-    modelMatrix.translate(0,3, 0);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(90, 1, 0, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
+    projMatrix.translate(0,3, 0);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(90, 1, 0, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-		  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+		  	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
-    modelMatrix.translate(0,-3, 0);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(-90, 1, 0, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
+    projMatrix.translate(0,-3, 0);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(-90, 1, 0, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-			  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
-    modelMatrix.translate(3,0, 0);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(-90, 0, 1, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
+    projMatrix.translate(3,0, 0);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(-90, 0, 1, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
- modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.setPerspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+ projMatrix.setIdentity();    // DEFINE 'world-space' coords.
+  projMatrix.setPerspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
-  modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+    viewMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      -1.0, -2.0, -0.5,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
        // SAVE world coord system;
-    modelMatrix.translate( 0.4, -0.4, 0.0);
-  	modelMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
+    projMatrix.translate( 0.4, -0.4, 0.0);
+  	projMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
 
 	//drawGrid();
-	 modelMatrix.translate(0,15,3);
-	modelMatrix.scale(2, 2, 2);
-	modelMatrix.rotate(90, 0, 0, 1);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+	projMatrix.translate(0,15,3);
+	projMatrix.scale(2, 2, 2);
+	projMatrix.rotate(90, 0, 0, 1);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	modelMatrix.translate(0,0,2.5);
-	modelMatrix.scale(0.5, 0.5, 0.5);
-	modelMatrix.rotate(90, 0, 0, 1);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawSphere();
+	projMatrix.translate(0,0,2.5);
+	projMatrix.scale(0.5, 0.5, 0.5);
+	projMatrix.rotate(90, 0, 0, 1);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawSphere(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	modelMatrix.translate(-1.6,0,0);
-	modelMatrix.scale(0.5, 0.5, 0.5);
-	modelMatrix.rotate(90, 0, 1, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder2();
+	projMatrix.translate(-1.6,0,0);
+	projMatrix.scale(0.5, 0.5, 0.5);
+	projMatrix.rotate(90, 0, 1, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder2(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	modelMatrix.translate(0,0,-2);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(90, 0, 0, 1);
-	modelMatrix.rotate(g_angle01, 0,0,1);
-	drawSphere();
+	projMatrix.translate(0,0,-2);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(90, 0, 0, 1);
+	projMatrix.rotate(g_angle01, 0,0,1);
+	drawSphere(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	pushMatrix(modelMatrix);  // SAVE world drawing coords.
-	modelMatrix.translate(-7,0,0);
-	modelMatrix.scale(3, 0.5, 0.5);
-	modelMatrix.rotate(90, 0, 1, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+	pushMatrix(projMatrix);  // SAVE world drawing coords.
+	projMatrix.translate(-7,0,0);
+	projMatrix.scale(3, 0.5, 0.5);
+	projMatrix.rotate(90, 0, 1, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
 
-  	modelMatrix.translate(7,0,0);
-	modelMatrix.scale(3, 0.5, 0.5);
-	modelMatrix.rotate(-90, 0, 1, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+  	projMatrix.translate(7,0,0);
+	projMatrix.scale(3, 0.5, 0.5);
+	projMatrix.rotate(-90, 0, 1, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-		modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
 
-  	modelMatrix.translate(0,-7,0);
-	modelMatrix.scale(0.5, 3, 0.5);
-	modelMatrix.rotate(-90, 1, 0, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+  	projMatrix.translate(0,-7,0);
+	projMatrix.scale(0.5, 3, 0.5);
+	projMatrix.rotate(-90, 1, 0, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-			modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+			projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
 
-  	modelMatrix.translate(0,7,0);
-	modelMatrix.scale(0.5, 3, 0.5);
-	modelMatrix.rotate(90, 1, 0, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+  	projMatrix.translate(0,7,0);
+	projMatrix.scale(0.5, 3, 0.5);
+	projMatrix.rotate(90, 1, 0, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
 
-	modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.setPerspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+	projMatrix.setIdentity();    // DEFINE 'world-space' coords.
+    projMatrix.setPerspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
-  modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+    viewMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      -1.0, -2.0, -0.5,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
-	modelMatrix.translate( 0.4, -0.4, 0.0);
-  	modelMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
+	projMatrix.translate( 0.4, -0.4, 0.0);
+  	projMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
 
 	//drawGrid();
 
 
 //===================Draw Third OBJECT:
 
-	modelMatrix.translate(16,0.6, 0.0);
-	modelMatrix.scale(3, 3, 3);
-	modelMatrix.rotate(90, 0, 1, 0);
-	//modelMatrix.rotate(-120, 0, 0, 1);
-	//modelMatrix.rotate(g_angle01, 0,1,1);
+	projMatrix.translate(16,0.6, 0.0);
+	projMatrix.scale(3, 3, 3);
+	projMatrix.rotate(90, 0, 1, 0);
+	//projMatrix.rotate(-120, 0, 0, 1);
+	//projMatrix.rotate(g_angle01, 0,1,1);
 	// Drawing:
   // Pass our current matrix to the vertex shaders:
-    drawCylinder2();
+    drawCylinder2(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	pushMatrix(projMatrix);  // SAVE world drawing coords.
 
-	modelMatrix.translate(0,0, -1.8);
-	modelMatrix.scale(0.8, 0.8, 0.4);
-	//modelMatrix.rotate(, 0, 0, 1);
-	//modelMatrix.rotate(g_angle01, 0,1,1);
+	projMatrix.translate(0,0, -1.8);
+	projMatrix.scale(0.8, 0.8, 0.4);
+	//projMatrix.rotate(, 0, 0, 1);
+	//projMatrix.rotate(g_angle01, 0,1,1);
 	// Drawing:
   // Pass our current matrix to the vertex shaders:
-    drawCylinder();
+    drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
   //===========================================================
   //
-	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	//pushMatrix(projMatrix);  // SAVE world drawing coords.
 
-	modelMatrix.translate(-1.4,0, 0);
-	modelMatrix.scale(2.5/6, 0.25, 0.25);
-	modelMatrix.rotate(90, 0,1,0);
-	modelMatrix.rotate(g_angle01, 0,0,1);
-	drawSphere();
+	projMatrix.translate(-1.4,0, 0);
+	projMatrix.scale(2.5/6, 0.25, 0.25);
+	projMatrix.rotate(90, 0,1,0);
+	projMatrix.rotate(g_angle01, 0,0,1);
+	drawSphere(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	pushMatrix(modelMatrix);
+	pushMatrix(projMatrix);
 
-    modelMatrix.translate(-3,0, 0);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(90, 0, 1, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+    projMatrix.translate(-3,0, 0);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(90, 0, 1, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-	  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	  	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
-    modelMatrix.translate(0,3, 0);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(90, 1, 0, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
+    projMatrix.translate(0,3, 0);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(90, 1, 0, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-		  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+		  	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
-    modelMatrix.translate(0,-3, 0);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(-90, 1, 0, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
+    projMatrix.translate(0,-3, 0);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(-90, 1, 0, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
-		modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+		projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
   //===========================================================
   //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
-    modelMatrix.translate(3,0, 0);
-	modelMatrix.scale(1, 1, 1);
-	modelMatrix.rotate(-90, 0, 1, 0);
-	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
-	drawCylinder();
-
+  pushMatrix(projMatrix);  // SAVE world drawing coords.
+    projMatrix.translate(3,0, 0);
+	projMatrix.scale(1, 1, 1);
+	projMatrix.rotate(-90, 0, 1, 0);
+	//projMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
 }
 
-function drawCylinder(){
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+function drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix){
+	gl.uniformMatrix4fv(u_ProjMatrix, false, projMatrix.elements);
   // Draw just the the cylinder's vertices:
     gl.drawArrays(gl.TRIANGLE_STRIP,				// use this drawing primitive, and
   							cylStart/floatsPerVertex, // start at this vertex number, and
   							cylVerts.length/floatsPerVertex);	// draw this many vertices.
 }
 
-function drawCylinder2(){
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+function drawCylinder2(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix){
+	gl.uniformMatrix4fv(u_ProjMatrix, false, projMatrix.elements);
   // Draw just the the cylinder's vertices:
     gl.drawArrays(gl.TRIANGLE_STRIP,				// use this drawing primitive, and
   							cyl2Start/floatsPerVertex, // start at this vertex number, and
   							cylVerts2.length/floatsPerVertex);	// draw this many vertices.
 }
 
-function drawGrid(){
+function drawGrid(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix){
 
-	 gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	 gl.uniformMatrix4fv(u_ProjMatrix, false, projMatrix.elements);
      // Draw just the ground-plane's vertices
      gl.drawArrays(gl.LINES, 								// use this drawing primitive, and
   						  gndStart/floatsPerVertex,	// start at this vertex number, and
@@ -1148,18 +1161,18 @@ function drawGrid(){
 
 }
 
-function drawTorus(){
+function drawTorus(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix){
 
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	gl.uniformMatrix4fv(u_ProjMatrix, false, projMatrix.elements);
   		// Draw just the torus's vertices
     gl.drawArrays(gl.TRIANGLE_STRIP, 				// use this drawing primitive, and
   						  torStart/floatsPerVertex,	// start at this vertex number, and
   						  torVerts.length/floatsPerVertex);	// draw this many vertices.
 }
 
-function drawSphere(){
+function drawSphere(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix){
 
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	gl.uniformMatrix4fv(u_ProjMatrix, false, projMatrix.elements);
   		// Draw just the sphere's vertices
    gl.drawArrays(gl.TRIANGLE_STRIP,				// use this drawing primitive, and
   							sphStart/floatsPerVertex,	// start at this vertex number, and
@@ -1439,7 +1452,7 @@ function myKeyDown(kev) {
 }
 
 
-function keydown(ev) {
+function keydown(ev,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix) {
 //------------------------------------------------------
 //HTML calls this'Event handler' or 'callback function' when we press a key:
 	if(ev.keyCode == 38) { // The right arrow key was pressed
@@ -1467,7 +1480,7 @@ function keydown(ev) {
     }
 
      else { return; } // Prevent the unnecessary drawing
-    drawAll();
+    drawAll(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 }
 
 function myKeyUp(kev) {
