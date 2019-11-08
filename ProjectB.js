@@ -966,7 +966,7 @@ function drawAll(gl){
     modelMatrix.translate( 0.4, -0.4, 0.0);	
   	modelMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
 	
-	drawGrid();	
+	//drawGrid();	
 	 modelMatrix.translate(0,15,3);  
 	modelMatrix.scale(2, 2, 2);
 	modelMatrix.rotate(90, 0, 0, 1); 
