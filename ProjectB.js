@@ -60,7 +60,7 @@ function main() {
   var myCanvas = document.getElementById('webgl');
 	canvas = myCanvas;	// make it global--for everyone to use.
   // Get the rendering context for WebGL
-  
+
   var myGL = getWebGLContext(canvas);
   if (!myGL) {
     console.log('Failed to get the rendering context for WebGL');
@@ -104,7 +104,7 @@ function main() {
   document.onkeydown= function(ev){keydown(ev,gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix); };
   gl.uniformMatrix4fv(u_ProjMatrix, false, projMatrix.elements);
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
-  
+
 
 
 
@@ -1014,6 +1014,38 @@ function drawAll(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix){
 	drawCylinder(gl,u_ViewMatrix,viewMatrix,u_ProjMatrix,projMatrix);
 
 	projMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	modelMatrix.scale(2, 2, 2);
+	modelMatrix.rotate(90, 0, 0, 1);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+
+	modelMatrix.translate(0,0,2.5);
+	modelMatrix.scale(0.5, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 0, 1);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawSphere();
+
+	modelMatrix.translate(-1.6,0,0);
+	modelMatrix.scale(0.5, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder2();
+
+	modelMatrix.translate(0,0,-2);
+	modelMatrix.scale(1, 1, 1);
+	modelMatrix.rotate(90, 0, 0, 1);
+	modelMatrix.rotate(g_angle01, 0,0,1);
+	drawSphere();
+
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix.translate(-7,0,0);
+	modelMatrix.scale(3, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+
   //===========================================================
   //
   pushMatrix(projMatrix);  // SAVE world drawing coords.
