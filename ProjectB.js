@@ -896,6 +896,7 @@ function drawAll(gl){
 
 //===================Draw FIRST OBJECT:
   //-------Draw lower Spinning Cylinder:
+    modelMatrix.scale(1/7,1/7,1/7);
 	modelMatrix.translate(-0.6,0.6, 0.0);
 	modelMatrix.scale(1.5, 1.5, 1.5);
 	//modelMatrix.rotate(90, 0, 1, 0);
@@ -966,7 +967,7 @@ function drawAll(gl){
     modelMatrix.translate( 0.4, -0.4, 0.0);
   	modelMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
 
-	drawGrid();
+	//drawGrid();
 	 modelMatrix.translate(0,15,3);
 	modelMatrix.scale(2, 2, 2);
 	modelMatrix.rotate(90, 0, 0, 1);
@@ -1045,7 +1046,7 @@ function drawAll(gl){
 	modelMatrix.translate( 0.4, -0.4, 0.0);
   	modelMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
 
-	drawGrid();
+	//drawGrid();
 
 
 //===================Draw Third OBJECT:
