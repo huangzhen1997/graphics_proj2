@@ -1284,7 +1284,7 @@ function drawAll(){
                         1000);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     g_atX, g_atY, g_lookZ,      // look-at point
+                     g_lookX, g_lookY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
        // SAVE world coord system;
@@ -1364,7 +1364,7 @@ function drawAll(){
                         1000);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     g_atX, g_atY, g_lookZ,      // look-at point
+                     g_lookX, g_lookY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
 	modelMatrix.translate( 0.4, -0.4, 0.0);
