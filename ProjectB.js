@@ -966,15 +966,15 @@ function drawAll(gl){
        // SAVE world coord system;
     modelMatrix.translate( 0.4, -0.4, 0.0);
   	modelMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
-<<<<<<< HEAD
+
 	
 	//drawGrid();	
 	 modelMatrix.translate(0,15,3);  
-=======
+
 
 	//drawGrid();
 	 modelMatrix.translate(0,15,3);
->>>>>>> cac25a6bb99b6d407ace9f8288825db367c49e16
+
 	modelMatrix.scale(2, 2, 2);
 	modelMatrix.rotate(90, 0, 0, 1);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
