@@ -901,7 +901,7 @@ function drawAll(){
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.perspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+  modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
@@ -995,7 +995,7 @@ function drawAll(){
 	//===================Draw Second OBJECT(Helicopter):
 
  modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.setPerspective(49.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+  modelMatrix.setPerspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
@@ -1278,7 +1278,7 @@ function drawAll(){
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.ortho(-333*gl.drawingBufferWidth/2000,333*gl.drawingBufferWidth/2000,
+  modelMatrix.ortho(-333*gl.drawingBufferWidth/4000,333*gl.drawingBufferWidth/4000,
 					-333*gl.drawingBufferHeight/2000,333*gl.drawingBufferHeight/2000   // FOVY: top-to-bottom vertical image angle, in degrees
 					,-1000,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000);  // camera z-far distance (always positive; frustum ends at z = -zfar)
@@ -1778,6 +1778,16 @@ function myKeyDown(kev) {
 function keydown(ev) {
 //------------------------------------------------------
 //HTML calls this'Event handler' or 'callback function' when we press a key:
+
+	var dx = g_EyeX - g_lookX;
+	var dy = g_EyeY - g_lookY;
+	var dz = g_EyeZ - g_lookZ;
+	
+    var abs_l = Math.sqrt(dx*dx + dy*dy + dz*dz);
+    var abs_xy = Math.sqrt(dx*dx+dy*dy)
+
+
+
 	if(ev.keyCode == 38) { // The up arrow key was pressed
 //      g_EyeX += 0.01;
 				//g_EyeX -= 0.1;
@@ -1801,30 +1811,48 @@ function keydown(ev) {
 
     else if(ev.keyCode == 87){ // w go forward
 
-    	g_EyeX += 0.13*(g_lookX-g_EyeX);
-    	g_EyeZ += 0.13*(g_lookZ-g_EyeZ);
-    	g_EyeY+= 0.13*(g_lookY-g_EyeY);
+    	g_EyeX -= 0.1*(dx/abs_l);
+    	g_EyeZ -= 0.1*(dz/abs_l);
+    	g_EyeY-= 0.1*(dy/abs_l);
 
     	
-    	g_lookX += 0.13*(g_lookX-g_EyeX);
-    	g_lookZ += 0.13*(g_lookZ-g_EyeZ);
-    	g_lookY+= 0.13*(g_lookY-g_EyeY);
+    	g_lookX -= 0.1*(dx/abs_l);
+    	g_lookZ -= 0.1*(dz/abs_l);
+    	g_lookY-= 0.1*(dy/abs_l);
 
     }
 
     else if(ev.keyCode == 83){ // s go forward
 
 
-    	g_EyeX -= 0.13*(g_lookX-g_EyeX);
-    	g_EyeZ -= 0.13*(g_lookZ-g_EyeZ);
-    	g_EyeY-= 0.13*(g_lookY-g_EyeY);
+    	g_EyeX += 0.1*(dx/abs_l);
+    	g_EyeZ += 0.1*(dz/abs_l);
+    	g_EyeY+= 0.1*(dy/abs_l);
 
     	
-    	g_lookX -= 0.13*(g_lookX-g_EyeX);
-    	g_lookZ -= 0.13*(g_lookZ-g_EyeZ);
-    	g_lookY-= 0.13*(g_lookY-g_EyeY);
+    	g_lookX += 0.1*(dx/abs_l);
+    	g_lookZ += 0.1*(dz/abs_l);
+    	g_lookY+= 0.1*(dy/abs_l);
+
+    	
 
     }
+    
+    else if (ev.keyCode == 68){  //a
+    		g_EyeX -= 0.1 * dy / abs_xy;
+            g_EyeY += 0.1 * dx / abs_xy;
+            g_lookX -= 0.1 * dy / abs_xy;
+            g_lookY += 0.1 * dx / abs_xy;
+    }
+
+
+    else if (ev.keyCode == 65){  //d
+    		g_EyeX +=  0.1 * dy / abs_xy;
+            g_EyeY -=  0.1 * dx / abs_xy;
+            g_lookX += 0.1 * dy /  abs_xy;
+            g_lookY -= 0.1 * dx /  abs_xy;
+}
+
     else { return; } // Prevent the unnecessary drawing
 
 
