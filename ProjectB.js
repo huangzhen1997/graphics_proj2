@@ -30,6 +30,7 @@ var u_ModelMatrix;     // **GPU location** of the 'u_ModelMatrix' uniform
 var ANGLE_STEP = 45.0;		// Rotation angle rate (degrees/second)
 var ANGLE_STEP_2 = 20.0;   // A different Rotation angle rate (degrees/second)
 var floatsPerVertex = 7;	// # of Float32Array elements used for each vertex
+var g_theta =-27.5;
 													// (x,y,z,w)position + (r,g,b)color
 													// Later, see if you can add:
 													// (x,y,z) surface normal + (tx,ty) texture addr.
@@ -44,7 +45,11 @@ var g_xMclik=0.0;			// last mouse button-down position (in CVV coords)
 var g_yMclik=0.0;
 var g_xMdragTot=0.0;	// total (accumulated) mouse-drag amounts (in CVV coords).
 var g_yMdragTot=0.0;
-var g_EyeX = 0.20, g_EyeY = 0.25, g_EyeZ = 4.25;
+var g_EyeX = -5.20, g_EyeY = 1.25, g_EyeZ = 1.2;
+var g_lookX =1;
+var g_lookY =1;
+var g_lookZ = 1;
+var foward_dis = 0;
 
 function main() {
 //==============================================================================
@@ -105,10 +110,10 @@ function tick(){
 	var nuCanvas = document.getElementById('webgl');	// get current canvas
 	nuCanvas.width = innerWidth;
 	nuCanvas.height = innerHeight*3/4;
-	var nuGL = getWebGLContext(nuCanvas);
+	gl = getWebGLContext(nuCanvas);
 
     animate();  // Update the rotation angle
-    drawAll(nuGL);   // Draw shapes
+    drawAll();   // Draw shapes
 	document.getElementById('CurAngleDisplay').innerHTML=
 			'g_angle01= '+g_angle01.toFixed(5);
 	document.getElementById('CurAngleDisplay_2').innerHTML=
@@ -861,7 +866,7 @@ function makeGroundGrid() {
 	}
 }
 
-function drawAll(gl){
+function drawAll(){
 //==============================================================================
   // Clear <canvas>  colors AND the depth buffer
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -883,8 +888,20 @@ function drawAll(gl){
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
+
+
+  var g_atX=g_EyeX+Math.cos(g_theta * Math.PI / 180);
+  var g_atY=g_EyeY+Math.sin(g_theta * Math.PI / 180);
+  g_lookX = g_atX;
+  g_lookY =g_atY;
+
+  console.log("The look at x is "+g_atX);
+  console.log("The look at y is "+g_atY);
+  console.log(g_theta);
+
+
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     -1.0, -2.0, -0.5,      // look-at point
+                     g_lookX, g_lookY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
        // SAVE world coord system;
@@ -960,7 +977,7 @@ function drawAll(gl){
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     -1.0, -2.0, -0.5,      // look-at point
+                     g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
        // SAVE world coord system;
@@ -1040,7 +1057,7 @@ function drawAll(gl){
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     -1.0, -2.0, -0.5,      // look-at point
+                     g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
 	modelMatrix.translate( 0.4, -0.4, 0.0);
@@ -1442,31 +1459,56 @@ function myKeyDown(kev) {
 function keydown(ev) {
 //------------------------------------------------------
 //HTML calls this'Event handler' or 'callback function' when we press a key:
-	if(ev.keyCode == 38) { // The right arrow key was pressed
+	if(ev.keyCode == 38) { // The up arrow key was pressed
 //      g_EyeX += 0.01;
 				//g_EyeX -= 0.1;
-				g_EyeZ -= 0.1;				// INCREASED for perspective camera)
+				g_lookZ+=0.1;
+
+				// g_EyeZ -= 0.1;				// INCREASED for perspective camera)
     } else
-	if (ev.keyCode == 40) { // The left arrow key was pressed
+	if (ev.keyCode == 40) { // The down arrow key was pressed
 //      g_EyeX -= 0.01;
-				g_EyeZ += 0.1;		// INCREASED for perspective camera)
+
+				g_lookZ -= 0.1;		// INCREASED for perspective camera)
     } else
     if(ev.keyCode == 39) { // The right arrow key was pressed
 //      g_EyeX += 0.01;
-				g_EyeX -= 1;		// INCREASED for perspective camera)
+				g_theta -= 5;		// INCREASED for perspective camera)
     } else
     if (ev.keyCode == 37) { // The left arrow key was pressed
 //      g_EyeX -= 0.01;
-				g_EyeX += 1;		// INCREASED for perspective camera)
-    }
-    if(ev.KeyCode=38){
-    	g_EyeZ-=1;
-    }
-    if(ev.KeyCode=40){
-    	g_EyeZ+=1;
+				g_theta += 5;		// INCREASED for perspective camera)
     }
 
-     else { return; } // Prevent the unnecessary drawing
+    else if(ev.keyCode == 87){ // w go forward
+
+    	g_EyeX += 0.3*(g_lookX-g_EyeX);
+    	g_EyeZ += 0.3*(g_lookZ-g_EyeZ);
+    	g_EyeY+= 0.3*(g_lookY-g_EyeY);
+
+    	
+    	g_lookX += 0.3*(g_lookX-g_EyeX);
+    	g_lookZ += 0.3*(g_lookZ-g_EyeZ);
+    	g_lookY+= 0.3*(g_lookY-g_EyeY);
+
+    }
+
+    else if(ev.keyCode == 83){ // s go forward
+
+
+    	g_EyeX -= 0.13*(g_lookX-g_EyeX);
+    	g_EyeZ -= 0.13*(g_lookZ-g_EyeZ);
+    	g_EyeY-= 0.13*(g_lookY-g_EyeY);
+
+    	
+    	g_lookX -= 0.13*(g_lookX-g_EyeX);
+    	g_lookZ -= 0.13*(g_lookZ-g_EyeZ);
+    	g_lookY-= 0.13*(g_lookY-g_EyeY);
+
+    }
+    else { return; } // Prevent the unnecessary drawing
+
+
     drawAll();
 }
 
