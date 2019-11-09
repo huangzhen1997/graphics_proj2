@@ -1167,7 +1167,7 @@ function drawAll(){
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 	
-			//modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	//modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
 
 
 
@@ -1189,15 +1189,15 @@ function drawAll(){
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.ortho(-333*gl.drawingBufferWidth/2000,333*gl.drawingBufferWidth/2000,
-					-333*gl.drawingBufferHeight/2000,333*gl.drawingBufferHeight/2000   // FOVY: top-to-bottom vertical image angle, in degrees
-					,-1000,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        1000);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+  modelMatrix.ortho(-5,5,
+					-5,5  // FOVY: top-to-bottom vertical image angle, in degrees
+					,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
 
 
   //var g_atX=g_EyeX+Math.cos(g_theta * Math.PI / 180);
- // var g_atY=g_EyeY+Math.sin(g_theta * Math.PI / 180);
+  //var g_atY=g_EyeY+Math.sin(g_theta * Math.PI / 180);
   //g_lookX = g_atX;
   //g_lookY =g_atY;
 
@@ -1212,7 +1212,7 @@ function drawAll(){
 
        // SAVE world coord system;
     modelMatrix.translate( 0.4, -0.4, 0.0);
-  	modelMatrix.scale(100, 100, 100);				// shrink by 10X:
+  	modelMatrix.scale(1,1,1);				// shrink by 10X:
 
 	drawGrid();
 
@@ -1278,10 +1278,10 @@ function drawAll(){
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.ortho(-333*gl.drawingBufferWidth/4000,333*gl.drawingBufferWidth/4000,
-					-333*gl.drawingBufferHeight/2000,333*gl.drawingBufferHeight/2000   // FOVY: top-to-bottom vertical image angle, in degrees
-					,-1000,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        1000);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+  modelMatrix.ortho(-5,5,
+					-5,5  // FOVY: top-to-bottom vertical image angle, in degrees
+					,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_lookX, g_lookY, g_lookZ,      // look-at point
@@ -1289,9 +1289,10 @@ function drawAll(){
 
        // SAVE world coord system;
     modelMatrix.translate( 0.4, -0.4, 0.0);
-  	modelMatrix.scale(10, 10, 10);				// shrink by 10X:
+  	modelMatrix.scale(1, 1, 1);				// shrink by 10X:
 
 	//drawGrid();
+	modelMatrix.scale(1/7,1/7,1/7);
 	 modelMatrix.translate(0,15,3);
 	modelMatrix.scale(2, 2, 2);
 	modelMatrix.rotate(90, 0, 0, 1);
@@ -1358,22 +1359,23 @@ function drawAll(){
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.ortho(-333*gl.drawingBufferWidth/2000,333*gl.drawingBufferWidth/2000,
-					-333*gl.drawingBufferHeight/2000,333*gl.drawingBufferHeight/2000   // FOVY: top-to-bottom vertical image angle, in degrees
-					,-1000,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        1000);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+  modelMatrix.ortho(-5,5,
+					-5,5  // FOVY: top-to-bottom vertical image angle, in degrees
+					,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_lookX, g_lookY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
 	modelMatrix.translate( 0.4, -0.4, 0.0);
-  	modelMatrix.scale(10, 10, 10);				// shrink by 10X:
+  	modelMatrix.scale(1, 1, 1);				// shrink by 10X:
 
 	//drawGrid();
 
 
 //===================Draw Third OBJECT:
+	modelMatrix.scale(1/7,1/7,1/7);
 
 	modelMatrix.translate(16,0.6, 0.0);
 	modelMatrix.scale(3, 3, 3);
@@ -1784,7 +1786,7 @@ function keydown(ev) {
 	var dz = g_EyeZ - g_lookZ;
 	
     var abs_l = Math.sqrt(dx*dx + dy*dy + dz*dz);
-    var abs_xy = Math.sqrt(dx*dx+dy*dy)
+    var abs_xy = Math.sqrt(dx*dx+dy*dy);
 
 
 
