@@ -1202,9 +1202,7 @@ function drawAll(){
 	drawCylinder();
 
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
   	modelMatrix.translate(7,0,0);
 	modelMatrix.scale(3, 0.5, 0.5);
@@ -1212,10 +1210,8 @@ function drawAll(){
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-		modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
   	modelMatrix.translate(0,-7,0);
 	modelMatrix.scale(0.5, 3, 0.5);
@@ -1223,10 +1219,8 @@ function drawAll(){
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-			modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
   	modelMatrix.translate(0,7,0);
 	modelMatrix.scale(0.5, 3, 0.5);
@@ -1291,30 +1285,27 @@ function drawAll(){
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-	  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
     modelMatrix.translate(0,3, 0);
 	modelMatrix.scale(0.5, 3, 0.5);
 	modelMatrix.rotate(90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-		  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
     modelMatrix.translate(0,-3, 0);
 	modelMatrix.scale(0.5, 3, 0.5);
 	modelMatrix.rotate(-90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-		modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
     modelMatrix.translate(3,0, 0);
 	modelMatrix.scale(3, 0.5, 0.5);
 	modelMatrix.rotate(-90, 0, 1, 0);
@@ -1326,13 +1317,13 @@ function drawAll(){
 
 	//===================Draw Fourth OBJECT(Rectangle):
 	  //draw tower1
-modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+    modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
-  modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+    modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
@@ -1507,7 +1498,9 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
   	modelMatrix.scale(1,1,1);				// shrink by 10X:
 
 	drawGrid();
-
+	modelMatrix.scale(100, 100, 100);
+	drawAxes();
+	modelMatrix.scale(0.01, 0.01, 0.01);
 
 //===================Draw FIRST OBJECT:
   //-------Draw lower Spinning Cylinder:
@@ -1523,9 +1516,9 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 
   //===========================================================
   //
-	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
-	modelMatrix.translate(0,0, 2.8);
+	modelMatrix.translate(0,0, 2.5);
 	modelMatrix.scale(1, 1, 1);
 	modelMatrix.rotate(g_angle01, 0,0,1);
 	drawSphere();
@@ -1538,35 +1531,36 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-	  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+  
     modelMatrix.translate(0,3, 0);
 	modelMatrix.scale(1, 1, 1);
 	modelMatrix.rotate(90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-		  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
     modelMatrix.translate(0,-3, 0);
 	modelMatrix.scale(1, 1, 1);
 	modelMatrix.rotate(-90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-			  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
     modelMatrix.translate(3,0, 0);
 	modelMatrix.scale(1, 1, 1);
 	modelMatrix.rotate(-90, 0, 1, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
+
+
+	//===================Draw Second OBJECT(WindMill):
+
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
@@ -1591,7 +1585,7 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-	modelMatrix.translate(0,0,2.5);
+	modelMatrix.translate(0,0,2.25);
 	modelMatrix.scale(0.5, 0.5, 0.5);
 	modelMatrix.rotate(90, 0, 0, 1);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
@@ -1617,9 +1611,7 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 	drawCylinder();
 
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
   	modelMatrix.translate(7,0,0);
 	modelMatrix.scale(3, 0.5, 0.5);
@@ -1627,10 +1619,8 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-		modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
   	modelMatrix.translate(0,-7,0);
 	modelMatrix.scale(0.5, 3, 0.5);
@@ -1638,16 +1628,18 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-			modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
 	modelMatrix.translate(0,7,0);
 	modelMatrix.scale(0.5, 3, 0.5);
 	modelMatrix.rotate(90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
+	
+	
+    //===================Draw Third OBJECT(Helicopter):
+
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
   modelMatrix.ortho(-5,5,
@@ -1659,7 +1651,7 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
                      g_lookX, g_lookY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
-	modelMatrix.translate( 0.4, -0.4, 0.0);
+	//modelMatrix.translate( 0.4, -0.4, 0.0);
   	modelMatrix.scale(1, 1, 1);				// shrink by 10X:
 
 	//drawGrid();
@@ -1668,10 +1660,10 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 //===================Draw Third OBJECT:
 	modelMatrix.scale(1/7,1/7,1/7);
 
-	pushMatrix(modelMatrix);
+	//pushMatrix(modelMatrix);
 	
-	modelMatrix.translate(30,0.6, 0.0);
-	modelMatrix.scale(3, 3, 3);
+	modelMatrix.translate(30,-30, 0.0);
+	modelMatrix.scale(6, 6, 6);
 	modelMatrix.rotate(90, 0, 1, 0);
 	//modelMatrix.rotate(-120, 0, 0, 1);
 	//modelMatrix.rotate(g_angle01, 0,1,1);
@@ -1680,23 +1672,20 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     drawCylinder2();
 
 
-	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
 	modelMatrix.translate(0,0, -1.8);
-	modelMatrix.scale(0.8, 0.8, 0.4);
+	modelMatrix.scale(0.8, 0.8, 0.8);
 	//modelMatrix.rotate(, 0, 0, 1);
 	//modelMatrix.rotate(g_angle01, 0,1,1);
 	// Drawing:
   // Pass our current matrix to the vertex shaders:
     drawCylinder();
 
-  //===========================================================
-  //
-	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
 	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
-	modelMatrix.translate(-1.4,0, 0);
-	modelMatrix.scale(2.5/6, 0.25, 0.25);
+	modelMatrix.translate(-1.65,0,2);
+	modelMatrix.scale(0.4, 0.4, 0.4);
 	modelMatrix.rotate(90, 0,1,0);
 	modelMatrix.rotate(g_angle01, 0,0,1);
 	drawSphere();
@@ -1704,43 +1693,51 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 	pushMatrix(modelMatrix);
 
     modelMatrix.translate(-3,0, 0);
-	modelMatrix.scale(1, 1, 1);
+	modelMatrix.scale(3, 0.5, 0.5);
 	modelMatrix.rotate(90, 0, 1, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-	  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
     modelMatrix.translate(0,3, 0);
-	modelMatrix.scale(1, 1, 1);
+	modelMatrix.scale(0.5, 3, 0.5);
 	modelMatrix.rotate(90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-		  	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+  
     modelMatrix.translate(0,-3, 0);
-	modelMatrix.scale(1, 1, 1);
+	modelMatrix.scale(0.5, 3, 0.5);
 	modelMatrix.rotate(-90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
-		modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
-  //===========================================================
-  //
-  pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+    pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
     modelMatrix.translate(3,0, 0);
-	modelMatrix.scale(1, 1, 1);
+	modelMatrix.scale(3, 0.5, 0.5);
 	modelMatrix.rotate(-90, 0, 1, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
 
 
+	//===================Draw Fourth OBJECT(Rectangle):
+	
+	
+	modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+	modelMatrix.ortho(-5,5,
+					-5,5  // FOVY: top-to-bottom vertical image angle, in degrees
+					,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
+    modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+                     g_lookX, g_lookY, g_lookZ,      // look-at point
+                      0.0,  0.0,  1.0);     // 'up' vector
 
   //draw tower
 	//modelMatrix.translate( 0.4, -0.4, 0.0);
