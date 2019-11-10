@@ -1054,7 +1054,7 @@ function drawAll(){
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
   modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           vpAspect,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1102,7 +1102,7 @@ function drawAll(){
 	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
 	modelMatrix.translate(0,0,2.5);
-	modelMatrix.scale(1, 1, 0.5);
+	modelMatrix.scale(1, 1, 1);
 	modelMatrix.rotate(g_angle01, 0,0,1);
 	drawSphere();
 
@@ -1152,7 +1152,7 @@ function drawAll(){
 
  modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
   modelMatrix.setPerspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           vpAspect,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1177,7 +1177,7 @@ function drawAll(){
 	drawCylinder();
 
 	modelMatrix.translate(0,0,2.25);
-	modelMatrix.scale(0.5, 0.5, 0.25);
+	modelMatrix.scale(0.5, 0.5, 0.5);
 	modelMatrix.rotate(90, 0, 0, 1);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawSphere();
@@ -1234,7 +1234,7 @@ function drawAll(){
 	//===================Draw Third OBJECT(Helicopter):
 	modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           vpAspect,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1247,7 +1247,7 @@ function drawAll(){
 
 	//drawGrid();
 	modelMatrix.translate(30,-30, 0.0);
-	modelMatrix.scale(6,6,3);
+	modelMatrix.scale(6,6,6);
 	modelMatrix.rotate(90, 0, 1, 0);
 	//modelMatrix.rotate(-120, 0, 0, 1);
 	//modelMatrix.rotate(g_angle01, 0,1,1);
@@ -1319,7 +1319,7 @@ function drawAll(){
 	  //draw tower1
     modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           vpAspect,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1439,7 +1439,7 @@ function drawAll(){
     //draw tower1
     modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           vpAspect,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1557,7 +1557,7 @@ function drawAll(){
     //draw tower1
     modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           vpAspect,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
