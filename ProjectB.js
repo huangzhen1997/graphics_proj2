@@ -1122,6 +1122,7 @@ function drawAll(){
   //
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
 	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
 
 	modelMatrix.translate(-1.4,0, 0);
 	modelMatrix.scale(2.5/6, 0.25, 0.25);
@@ -1350,12 +1351,11 @@ function drawAll(){
   //
   pushMatrix(modelMatrix);  // SAVE world drawing coords.
 
-  	modelMatrix.translate(0,7,0);
+	modelMatrix.translate(0,7,0);
 	modelMatrix.scale(0.5, 3, 0.5);
 	modelMatrix.rotate(90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
-
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
   modelMatrix.ortho(-333*gl.drawingBufferWidth/2000,333*gl.drawingBufferWidth/2000,
