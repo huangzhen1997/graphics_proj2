@@ -1,11 +1,11 @@
 // Vertex shader program----------------------------------
 var VSHADER_SOURCE =
-  'uniform mat4 u_ModelMatrix;\n' +
+  'uniform mat4 u_modelMatrix;\n' +
   'attribute vec4 a_Position;\n' +
   'attribute vec4 a_Color;\n' +
   'varying vec4 v_Color;\n' +
   'void main() {\n' +
-  '  gl_Position = u_ModelMatrix * a_Position;\n' +
+  '  gl_Position = u_modelMatrix * a_Position;\n' +
   '  gl_PointSize = 10.0;\n' +
   '  v_Color = a_Color;\n' +
   '}\n';
@@ -26,7 +26,7 @@ var gl;				// main() sets this to the rendering context for WebGL. This object
 // holds ALL webGL functions as its members; I make it global here because we
 // nearly all our program's functions need it to make WebGL calls.  All those
 // functions would need 'gl' as an argument if we didn't make it a global var.
-var u_ModelMatrix;     // **GPU location** of the 'u_ModelMatrix' uniform
+var u_modelMatrix;     // **GPU location** of the 'u_modelMatrix' uniform
 var ANGLE_STEP = 45.0;		// Rotation angle rate (degrees/second)
 var ANGLE_STEP_2 = 20.0;   // A different Rotation angle rate (degrees/second)
 var floatsPerVertex = 7;	// # of Float32Array elements used for each vertex
@@ -94,10 +94,10 @@ function main() {
 //	gl.depthFunc(gl.LESS);			 // WebGL default setting: (default)
 	 gl.enable(gl.DEPTH_TEST);
 
-  // Get handle to graphics system's storage location of u_ModelMatrix
-  u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
-  if (!u_ModelMatrix) {
-    console.log('Failed to get the storage location of u_ModelMatrix');
+  // Get handle to graphics system's storage location of u_modelMatrix
+  u_modelMatrix = gl.getUniformLocation(gl.program, 'u_modelMatrix');
+  if (!u_modelMatrix) {
+    console.log('Failed to get the storage location of u_modelMatrix');
     return;
   }
 //-----------------
@@ -159,9 +159,10 @@ function initVertexBuffer(gl) {
   makeGroundGrid();				// create, fill the gndVerts array
   makeAxes();
   makeRectangle();
+  makePolygon();
   // how many floats total needed to store all shapes?
 	var mySiz = (cylVerts.length + cylVerts2.length + sphVerts.length +
-							 torVerts.length + gndVerts.length + AxesVerts.length + RecVerts.length);
+							 torVerts.length + gndVerts.length + AxesVerts.length + RecVerts.length+Polys.length);
 
 	// How many vertices total?
 	var nn = mySiz / floatsPerVertex;
@@ -197,6 +198,10 @@ function initVertexBuffer(gl) {
 	for(j=0; j< RecVerts.length; i++, j++) {
 		colorShapes[i] = RecVerts[j];
 		}
+		polyStart = i;
+	for(j=0; j< Polys.length; i++, j++) {
+	colorShapes[i] = Polys[j];
+	}
   // Create a buffer object on the graphics hardware:
   var shapeBufferHandle = gl.createBuffer();
   if (!shapeBufferHandle) {
@@ -328,6 +333,92 @@ function makeRectangle() {
     -1.0, -2.0, -1.0, 1.0,    0.0, 1.0, 1.0,  // Node 0
     -1.0,  2.0, -1.0, 1.0,    0.0, 0.0, 1.0,  // Node 1
      1.0,  2.0, -1.0, 1.0,    0.5, 0.2, 1.0,  // Node 2
+	]);
+//==============================================================================
+// Make a 4-cornered pyramid from one OpenGL TRIANGLE_STRIP primitive.
+// All vertex coords are +/1 or zero; pyramid base is in xy plane.
+
+  	// YOU write this one...
+}
+
+function makePolygon() {
+	Polys = new Float32Array([
+	
+     //Polygon
+    //RED  
+    0.5, 0.0, 1.0, 1.0,   1.0, 0.0, 0.0,// NODE 1
+    -0.5, 0.0, 1.0, 1.0,  1.0, 0.0, 0.0,// NODE 2
+    -0.5, 2.0, 1.0, 1.0,  1.0, 1.0, 0.0,// NODE 10
+    
+    -0.5, 2.0, 1.0, 1.0,  1.0, 1.0, 0.0,// NODE 10 
+    0.5, 2.0, 1.0, 1.0,   1.0, 0.0, 1.0,// NODE 9
+    0.5, 0.0, 1.0, 1.0,   1.0, 0.0, 0.0,// NODE 1
+
+    1.0, 0.0, 0.5, 1.0,   0.35, 0.5, 1.0,//NODE 0
+    0.5, 0.0, 1.0, 1.0,   0.6, 0.0, 0.5,// NODE 1
+    0.5, 2.0, 1.0, 1.0,   1.0, 0.0, 0.0,// NODE 9
+    
+    0.5, 2.0, 1.0, 1.0,   1.0, 0.1, 0.1,// NODE 9
+    1.0, 2.0, 0.5,1.0,    1.0, 0.1, 0.1, //NODE 8
+    1.0, 0.0, 0.5, 1.0,   1.0, 0.0, 1.0,//NODE 0
+    
+
+    //GREEN
+
+    -1.0, 0.0, 0.5, 1.0,  0.0, 0.6, 0.0,// NODE 3
+    -1.0, 0.0, -0.5, 1.0, 1.0, 0.3, 0.0,// NODE 4
+    -1.0, 2.0, -0.5, 1.0, 1.0, 0.0, 0.3,// NODE 12
+    
+    -1.0, 2.0, -0.5, 1.0, 1.0, 0.0, 0.6,// NODE 12
+    -1.0, 2.0, 0.5, 1.0,  1.0, 0.5, 0.0,// NODE 11
+    -1.0, 0.0, 0.5, 1.0,  0.1, 0.0, 0.0,// NODE 3
+
+
+    -0.5, 0.0, 1.0, 1.0,    0.4, 0.5, 0.5,// NODE 2
+    -1.0, 0.0, 0.5, 1.0,    0.5, 0.5, 0.5,// NODE 3
+    -1.0, 2.0, 0.5, 1.0,    0.1, 1.0, 0.5,// NODE 11
+
+    -1.0, 2.0, 0.5, 1.0,    0.3, 1.0, 0.5,// NODE 11
+    -0.5, 2.0, 1.0, 1.0,    0.1, 0.1, 0.5,// NODE 10
+    -0.5, 0.0, 1.0, 1.0,    0.1, 1.0, 0.1,// NODE 2
+
+
+        //BLUE
+    -1.0, 0.0, -0.5, 1.0,   0.0, 0.5, 1.0,// NODE 4
+    -0.5, 0.0, -1.0, 1.0,   0.2, 0.3, 1.0,// NODE 5
+    -0.5, 2.0, -1.0, 1.0,   0.0, 0.75, 1.0,// NODE 13
+
+    -0.5, 2.0, -1.0, 1.0,   0.1, 0.1, 1.0,// NODE 13
+    -1.0, 2.0, -0.5, 1.0,   0.1, 0.1, 1.0,// NODE 12
+    -1.0, 0.0, -0.5, 1.0,   0.1, 0.1, 1.0,// NODE 4
+
+    -0.5, 0.0, -1.0, 1.0, 1.0, 0.2, 0.76,// NODE 5
+    0.5, 0.0, -1.0, 1.0,  1.0, 0.0, 0.0,// NODE 6
+    0.5, 2.0, -1.0, 1.0,  1.0, 0.0, 0.0,// NODE 14
+    
+    0.5, 2.0, -1.0, 1.0,  1.0, 0.0, 0.75,// NODE 14
+    -0.5, 2.0, -1.0, 1.0, 1.0, 0.0, 0.4,// NODE 13
+    -0.5, 0.0, -1.0, 1.0, 1.0, 0.0, 0.75,// NODE 5
+      
+    
+    //CYAN
+    0.5, 0.0, -1.0, 1.0,  0.0, 0.5, 1.0,// NODE 6
+    1.0, 0.0, -0.5, 1.0,  0.0, 1.0, 1.0,// NODE 7
+    1.0, 2.0, -0.5, 1.0,  0.0, 1.0, 1.0,// NODE 15
+    
+    1.0, 2.0, -0.5, 1.0,  0.1, 1.0, 1.0,// NODE 15
+    0.5, 2.0, -1.0, 1.0,  0.1, 0.5, 1.0,// NODE 14
+    0.5, 0.0, -1.0, 1.0,  0.1, 0.5, 0.1,// NODE 6
+  
+
+    1.0, 0.0, -0.5, 1.0,    0.0, 0.0, 1.0,// NODE 7
+    1.0, 0.0, 0.5, 1.0,     1.0, 0.0, 1.0,//NODE 0
+    1.0, 2.0, 0.5, 1.0,    1.0, 0.1, 0.1, //NODE 8
+
+    1.0, 2.0, 0.5, 1.0,    1.0, 0.1, 0.1, //NODE 8
+    1.0, 2.0, -0.5, 1.0,    0.1, 1.0, 1.0,// NODE 15
+    1.0, 0.0, -0.5, 1.0,    0.0, 1.0, 1.0,// NODE 7
+
 	]);
 //==============================================================================
 // Make a 4-cornered pyramid from one OpenGL TRIANGLE_STRIP primitive.
@@ -1234,7 +1325,7 @@ function drawAll(){
 
 
 	//===================Draw Fourth OBJECT(Rectangle):
-	
+	  //draw tower1
 modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
@@ -1245,12 +1336,133 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
                      g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
+
+
+  //draw tower
 	//modelMatrix.translate( 0.4, -0.4, 0.0);
-  	modelMatrix.scale(0.1, 0.1, 0.1);
-	 modelMatrix.translate(3,0, 0);
-	 drawRectangle();
-	  
+	modelMatrix.translate(7,4,4);
+	modelMatrix.rotate(90,1,0,0);
+  pushMatrix(modelMatrix);
+  modelMatrix.scale(5,5,5)
+  pushMatrix(modelMatrix);
+  modelMatrix.scale(0.1, 0.15, 0.1);
 	
+	drawRectangle();
+	  
+
+//2
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(0,-0.1,-0.2);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+
+  //1
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(-0.2,-0.4,-0.2);
+  modelMatrix.scale(0.1, 0.2, 0.1);
+  drawRectangle();
+
+
+//    //pos6
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0.2,-0.1,0);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+      // Draw just the first set of vertices: start at vertex 0...
+
+
+//5
+  modelMatrix=popMatrix();
+  modelMatrix.translate(0,0,0);
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.scale(0.1, 0.4, 0.1);
+  drawRectangle();
+
+  // //4
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(-0.2,-0.1,0);
+
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+
+   //pos9
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0.2,-0.4,0.2);
+  modelMatrix.scale(0.1, 0.2, 0.1);
+  drawRectangle();
+
+  //8
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0,0,0.2);
+  modelMatrix.scale(0.1, 0.4, 0.1);
+  drawRectangle();
+
+
+  //7
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(-0.2,-0.5,0.2);
+  modelMatrix.scale(0.1, 0.15, 0.1);
+  drawRectangle();
+
+
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0,0.8,0.2);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  // modelMatrix.scale(0.09, 0.45, 0.09);
+  drawTentacle();
+
+//tentacle 2
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0.01,0.8,-0.0);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  // modelMatrix.scale(0.09, 0.45, 0.09);
+  drawTentacle();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//right screen:
 	//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -1456,6 +1668,8 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 //===================Draw Third OBJECT:
 	modelMatrix.scale(1/7,1/7,1/7);
 
+	pushMatrix(modelMatrix);
+	
 	modelMatrix.translate(30,0.6, 0.0);
 	modelMatrix.scale(3, 3, 3);
 	modelMatrix.rotate(90, 0, 1, 0);
@@ -1528,18 +1742,129 @@ modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
 
 
 
+  //draw tower
+	//modelMatrix.translate( 0.4, -0.4, 0.0);
+	modelMatrix.translate(7,4,4);
+	modelMatrix.rotate(90,1,0,0);
+  pushMatrix(modelMatrix);
+  modelMatrix.scale(5,5,5)
+  pushMatrix(modelMatrix);
+  modelMatrix.scale(0.1, 0.15, 0.1);
+	
+	drawRectangle();
+	  
+
+//2
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(0,-0.1,-0.2);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+
+  //1
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(-0.2,-0.4,-0.2);
+  modelMatrix.scale(0.1, 0.2, 0.1);
+  drawRectangle();
+
+
+//    //pos6
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0.2,-0.1,0);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+      // Draw just the first set of vertices: start at vertex 0...
+
+
+//5
+  modelMatrix=popMatrix();
+  modelMatrix.translate(0,0,0);
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.scale(0.1, 0.4, 0.1);
+  drawRectangle();
+
+  // //4
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(-0.2,-0.1,0);
+
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+
+   //pos9
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0.2,-0.4,0.2);
+  modelMatrix.scale(0.1, 0.2, 0.1);
+  drawRectangle();
+
+  //8
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0,0,0.2);
+  modelMatrix.scale(0.1, 0.4, 0.1);
+  drawRectangle();
+
+
+  //7
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(-0.2,-0.5,0.2);
+  modelMatrix.scale(0.1, 0.15, 0.1);
+  drawRectangle();
+
+
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0,0.8,0.2);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  // modelMatrix.scale(0.09, 0.45, 0.09);
+  drawTentacle();
+
+//tentacle 2
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0.01,0.8,-0.0);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  // modelMatrix.scale(0.09, 0.45, 0.09);
+  drawTentacle();
+
 }
 
 function drawCylinder(){
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
   // Draw just the the cylinder's vertices:
     gl.drawArrays(gl.TRIANGLE_STRIP,				// use this drawing primitive, and
   							cylStart/floatsPerVertex, // start at this vertex number, and
   							cylVerts.length/floatsPerVertex);	// draw this many vertices.
 }
 
+function drawTentacle(){
+	gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
+  // Draw just the the cylinder's vertices:
+    gl.drawArrays(gl.TRIANGLES,				// use this drawing primitive, and
+  							polyStart/floatsPerVertex, // start at this vertex number, and
+  							Polys.length/floatsPerVertex);	// draw this many vertices.
+}
+
 function drawCylinder2(){
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
   // Draw just the the cylinder's vertices:
     gl.drawArrays(gl.TRIANGLE_STRIP,				// use this drawing primitive, and
   							cyl2Start/floatsPerVertex, // start at this vertex number, and
@@ -1548,7 +1873,7 @@ function drawCylinder2(){
 
 function drawGrid(){
 
-	 gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	 gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
      // Draw just the ground-plane's vertices
      gl.drawArrays(gl.LINES, 								// use this drawing primitive, and
   						  gndStart/floatsPerVertex,	// start at this vertex number, and
@@ -1558,7 +1883,7 @@ function drawGrid(){
 
 function drawTorus(){
 
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
   		// Draw just the torus's vertices
     gl.drawArrays(gl.TRIANGLE_STRIP, 				// use this drawing primitive, and
   						  torStart/floatsPerVertex,	// start at this vertex number, and
@@ -1567,7 +1892,7 @@ function drawTorus(){
 
 function drawSphere(){
 
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
   		// Draw just the sphere's vertices
    gl.drawArrays(gl.TRIANGLE_STRIP,				// use this drawing primitive, and
   							sphStart/floatsPerVertex,	// start at this vertex number, and
@@ -1576,7 +1901,7 @@ function drawSphere(){
 
 function drawAxes(){
 
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
   		// Draw just the sphere's vertices
    gl.drawArrays(gl.LINES,				// use this drawing primitive, and
   							axeStart/floatsPerVertex,	// start at this vertex number, and
@@ -1584,9 +1909,9 @@ function drawAxes(){
 }
 
 function drawRectangle(){
-	gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+	gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
   		// Draw just the sphere's vertices
-   gl.drawArrays(gl.TRIANGLE_STRIP,				// use this drawing primitive, and
+   gl.drawArrays(gl.TRIANGLES,				// use this drawing primitive, and
   							recStart/floatsPerVertex,	// start at this vertex number, and
   							RecVerts.length/floatsPerVertex);	// draw this many vertices.
 }
