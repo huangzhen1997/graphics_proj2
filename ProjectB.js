@@ -1056,7 +1056,7 @@ function drawAll(){
   modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
 
 
@@ -1154,7 +1154,7 @@ function drawAll(){
   modelMatrix.setPerspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
@@ -1236,7 +1236,7 @@ function drawAll(){
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
@@ -1321,7 +1321,7 @@ function drawAll(){
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
                            vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        1000.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
     modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
@@ -1333,13 +1333,12 @@ function drawAll(){
 	//modelMatrix.translate( 0.4, -0.4, 0.0);
 	modelMatrix.translate(7,4,4);
 	modelMatrix.rotate(90,1,0,0);
+  modelMatrix.scale(5,5,5);
   pushMatrix(modelMatrix);
-  modelMatrix.scale(5,5,5)
-  pushMatrix(modelMatrix);
+  modelMatrix.translate(0.2,-0.5,-0.2);
   modelMatrix.scale(0.1, 0.15, 0.1);
-	
 	drawRectangle();
-	  
+	
 
 //2
   modelMatrix=popMatrix();
@@ -1365,7 +1364,7 @@ function drawAll(){
   
   modelMatrix.translate(0.2,-0.1,0);
   modelMatrix.scale(0.1, 0.35, 0.1);
-  drawRectangle();
+  //drawRectangle();
       // Draw just the first set of vertices: start at vertex 0...
 
 
@@ -1742,13 +1741,12 @@ function drawAll(){
   //draw tower
 	//modelMatrix.translate( 0.4, -0.4, 0.0);
 	modelMatrix.translate(7,4,4);
-	modelMatrix.rotate(90,1,0,0);
+  modelMatrix.rotate(90,1,0,0);
+  modelMatrix.scale(5,5,5);
   pushMatrix(modelMatrix);
-  modelMatrix.scale(5,5,5)
-  pushMatrix(modelMatrix);
+  modelMatrix.translate(0.2,-0.5,-0.2);
   modelMatrix.scale(0.1, 0.15, 0.1);
-	
-	drawRectangle();
+  drawRectangle();
 	  
 
 //2
