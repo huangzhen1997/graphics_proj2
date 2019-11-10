@@ -1570,7 +1570,7 @@ function drawAll(){
   //draw tower
   //modelMatrix.translate( 0.4, -0.4, 0.0);
 
-  modelMatrix.translate(7,-6,4);
+  modelMatrix.translate(7,-4,4);
   modelMatrix.rotate(90,1,0,0);
   modelMatrix.scale(5,5,5);
   pushMatrix(modelMatrix);
