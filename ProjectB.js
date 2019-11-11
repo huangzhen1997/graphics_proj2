@@ -2428,7 +2428,11 @@ if (ANGLE_STEP>=800){
     console.log("current height is "+current);
 }
 else{
-  new_height=current;
+	if(currentHeight < 0 ){
+		new_height = current - (height_steps * elapsed)/2 ;
+	}
+  
+  else{new_height=current;}
 }
 
 return new_height;
