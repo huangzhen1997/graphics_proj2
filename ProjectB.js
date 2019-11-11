@@ -2412,17 +2412,8 @@ document.getElementById('EditBoxOut').innerHTML ='You Typed: '+userHeight;
 console.log('heightSubmit: userHeight:', userHeight); // print in console, and
 
 
-if (new_height >= 10){
-  userHeight =10;
-}
+ANGLE_STEP = new_height;
 
-else if (new_height <= 0){
-  userHeight =0;
-}
-
-else{
-  userHeight = new_height;
-}
 }
 
 function animateHeight(current, now){
@@ -2432,21 +2423,13 @@ g_last = now;
 var new_height;
 
 
-  if (current > userHeight){
-
-    new_height = current - (height_steps * elapsed)/2 ;
-    console.log("current height is "+current);
-  }
-
-
-else if (current < userHeight){
+if (ANGLE_STEP>=800){
 
     new_height = current + (height_steps * elapsed)/2 ;
     console.log("current height is "+current);
 }
-
-else {
-  new_height = current;
+else{
+  new_height=current;
 }
 
 return new_height;
@@ -2528,9 +2511,6 @@ function runStop() {
     }
 
   }
-
-
-
 
 
   function myMouseMove(ev) {
