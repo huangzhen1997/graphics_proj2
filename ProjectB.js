@@ -118,10 +118,9 @@ function tick(){
 
     animate();  // Update the rotation angle
     drawAll();   // Draw shapes
-	document.getElementById('CurAngleDisplay').innerHTML=
-			'g_angle01= '+g_angle01.toFixed(5);
-	document.getElementById('CurAngleDisplay_2').innerHTML=
-			'g_angle02= '+g_angle02.toFixed(5);
+	
+	document.getElementById('current_rpm').innerHTML=
+			'Current RPM = '+ANGLE_STEP.toFixed(5);
 		 //Also display our current mouse-dragging state:
 		document.getElementById('Mouse').innerHTML=
 			'Mouse Drag totals (CVV coords):\t'+
@@ -2087,10 +2086,10 @@ function drawAll(){
   //===================Draw Fifth OBJECT(Rectangle):
     //draw tower1
     modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-    modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
-                           1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+    modelMatrix.ortho(-5,5,
+          -5,5  // FOVY: top-to-bottom vertical image angle, in degrees
+          ,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
     modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
@@ -2205,10 +2204,10 @@ function drawAll(){
   //===================Draw Sixth OBJECT(Rectangle):
     //draw tower1
     modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-    modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
-                           1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+    modelMatrix.ortho(-5,5,
+          -5,5  // FOVY: top-to-bottom vertical image angle, in degrees
+          ,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
     modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
@@ -2505,10 +2504,8 @@ function runStop() {
 
   function resetHeight(){
 
-    if(userHeight!=0){
-      userHeight=0;
-      currentHeight = 0;
-    }
+    ANGLE_STEP = 45;
+    currentHeight = 0;
 
   }
 
