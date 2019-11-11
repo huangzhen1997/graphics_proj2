@@ -31,6 +31,8 @@ var ANGLE_STEP = 45.0;		// Rotation angle rate (degrees/second)
 var ANGLE_STEP_2 = 20.0;   // A different Rotation angle rate (degrees/second)
 var floatsPerVertex = 7;	// # of Float32Array elements used for each vertex
 var g_theta =-27.5;
+var userHeight=0;
+var currentHeight=0;
 													// (x,y,z,w)position + (r,g,b)color
 													// Later, see if you can add:
 													// (x,y,z) surface normal + (tx,ty) texture addr.
@@ -38,6 +40,7 @@ var g_angle01 = 0.0;        // animation angle 01 (degrees)
 var g_angle02 = 0.0;        // animation angle 02 (degrees)
 var g_last = Date.now();
 var modelMatrix = new Matrix4();
+var height_steps = 0.1;
 
 	//------------For mouse click-and-drag: -------------------------------
 var g_isDrag=false;		// mouse-drag: true when user holds down mouse button
@@ -107,6 +110,7 @@ function main() {
 }
 
 function tick(){
+  var now = Date.now();
 	var nuCanvas = document.getElementById('webgl');	// get current canvas
 	nuCanvas.width = innerWidth;
 	nuCanvas.height = innerHeight*3/4;
@@ -125,6 +129,7 @@ function tick(){
     // report current angle on console
     //console.log('currentAngle=',currentAngle);
     requestAnimationFrame(tick, canvas);
+    currentHeight = animateHeight(currentHeight,now);
     									// Request that the browser re-draw the webpage
 }
 
@@ -1248,6 +1253,7 @@ function drawAll(){
 	//drawGrid();
 	modelMatrix.translate(30,-30, 0.0);
 	modelMatrix.scale(6,6,6);
+  modelMatrix.translate(0,0,-currentHeight);
 	modelMatrix.rotate(90, 0, 1, 0);
 	//modelMatrix.rotate(-120, 0, 0, 1);
 	//modelMatrix.rotate(g_angle01, 0,1,1);
@@ -1897,6 +1903,7 @@ function drawAll(){
 	
 	modelMatrix.translate(30,-30, 0.0);
 	modelMatrix.scale(6, 6, 6);
+  modelMatrix.translate(0,0,-currentHeight);
 	modelMatrix.rotate(90, 0, 1, 0);
 	//modelMatrix.rotate(-120, 0, 0, 1);
 	//modelMatrix.rotate(g_angle01, 0,1,1);
@@ -2074,7 +2081,251 @@ function drawAll(){
   // modelMatrix.scale(0.09, 0.45, 0.09);
   drawTentacle();
 
+
+
+
+  //===================Draw Fifth OBJECT(Rectangle):
+    //draw tower1
+    modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+    modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+                           1.0,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+
+    modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+                     g_atX, g_atY, g_lookZ,      // look-at point
+                      0.0,  0.0,  1.0);     // 'up' vector
+
+
+
+  //draw tower
+  //modelMatrix.translate( 0.4, -0.4, 0.0);
+
+  modelMatrix.translate(7,0,4);
+  modelMatrix.rotate(90,1,0,0);
+  modelMatrix.scale(5,5,5);
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0.2,-0.5,-0.2);
+  modelMatrix.scale(0.1, 0.15, 0.1);
+  drawRectangle();
+  
+
+//2
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(0,-0.1,-0.2);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+
+  //1
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(-0.2,-0.4,-0.2);
+  modelMatrix.scale(0.1, 0.2, 0.1);
+  drawRectangle();
+
+
+//    //pos6
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0.2,-0.1,0);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+      // Draw just the first set of vertices: start at vertex 0...
+
+
+//5
+  modelMatrix=popMatrix();
+  modelMatrix.translate(0,0,0);
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.scale(0.1, 0.4, 0.1);
+  drawRectangle();
+
+  // //4
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(-0.2,-0.1,0);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+
+   //pos9
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0.2,-0.4,0.2);
+  modelMatrix.scale(0.1, 0.2, 0.1);
+  drawRectangle();
+
+  //8
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0,0,0.2);
+  modelMatrix.scale(0.1, 0.4, 0.1);
+  drawRectangle();
+
+
+  //7
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(-0.2,-0.5,0.2);
+  modelMatrix.scale(0.1, 0.15, 0.1);
+  drawRectangle();
+
+
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0,0.8,0.2);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  // modelMatrix.scale(0.09, 0.45, 0.09);
+  drawTentacle();
+
+//tentacle 2
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0.01,0.8,-0.0);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  // modelMatrix.scale(0.09, 0.45, 0.09);
+  drawTentacle();
+
+
+
+  //===================Draw Sixth OBJECT(Rectangle):
+    //draw tower1
+    modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+    modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+                           1.0,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+
+    modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+                     g_atX, g_atY, g_lookZ,      // look-at point
+                      0.0,  0.0,  1.0);     // 'up' vector
+
+
+
+  //draw tower
+  //modelMatrix.translate( 0.4, -0.4, 0.0);
+
+  modelMatrix.translate(7,-4,4);
+  modelMatrix.rotate(90,1,0,0);
+  modelMatrix.scale(5,5,5);
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0.2,-0.5,-0.2);
+  modelMatrix.scale(0.1, 0.15, 0.1);
+  drawRectangle();
+  
+
+//2
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(0,-0.1,-0.2);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+
+  //1
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(-0.2,-0.4,-0.2);
+  modelMatrix.scale(0.1, 0.2, 0.1);
+  drawRectangle();
+
+
+//    //pos6
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0.2,-0.1,0);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+      // Draw just the first set of vertices: start at vertex 0...
+
+
+//5
+  modelMatrix=popMatrix();
+  modelMatrix.translate(0,0,0);
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.scale(0.1, 0.4, 0.1);
+  drawRectangle();
+
+  // //4
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0)
+  modelMatrix.translate(-0.2,-0.1,0);
+  modelMatrix.scale(0.1, 0.35, 0.1);
+  drawRectangle();
+
+   //pos9
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0.2,-0.4,0.2);
+  modelMatrix.scale(0.1, 0.2, 0.1);
+  drawRectangle();
+
+  //8
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(0,0,0.2);
+  modelMatrix.scale(0.1, 0.4, 0.1);
+  drawRectangle();
+
+
+  //7
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  //modelMatrix.rotate(-currentAngle,1,1,0);
+  
+  modelMatrix.translate(-0.2,-0.5,0.2);
+  modelMatrix.scale(0.1, 0.15, 0.1);
+  drawRectangle();
+
+
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0,0.8,0.2);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  // modelMatrix.scale(0.09, 0.45, 0.09);
+  drawTentacle();
+
+//tentacle 2
+  modelMatrix=popMatrix();
+  pushMatrix(modelMatrix);
+  modelMatrix.translate(0.01,0.8,-0.0);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  modelMatrix.scale(0.09, 0.45, 0.09);
+  // modelMatrix.scale(0.09, 0.45, 0.09);
+  drawTentacle();
+
 }
+
+
+
+
+
+
+
 
 function drawCylinder(){
 	gl.uniformMatrix4fv(u_modelMatrix, false, modelMatrix.elements);
@@ -2148,21 +2399,61 @@ function drawRectangle(){
 
  //==================HTML Button Callbacks======================
 
-function angleSubmit() {
-// Called when user presses 'Submit' button on our webpage
-//		HOW? Look in HTML file (e.g. ControlMulti.html) to find
-//	the HTML 'input' element with id='usrAngle'.  Within that
-//	element you'll find a 'button' element that calls this fcn.
+function heightSubmit() {
 
-// Read HTML edit-box contents:
-	var UsrTxt = document.getElementById('usrAngle').value;
+
+var old_height = currentHeight;
+
+var new_height = parseFloat(document.getElementById('usrHeight').value);
+console.log("To reach is "+userHeight);
 // Display what we read from the edit-box: use it to fill up
 // the HTML 'div' element with id='editBoxOut':
-  document.getElementById('EditBoxOut').innerHTML ='You Typed: '+UsrTxt;
-  console.log('angleSubmit: UsrTxt:', UsrTxt); // print in console, and
-  g_angle01 = parseFloat(UsrTxt);     // convert string to float number
-  g_angle02 = parseFloat(UsrTxt);     // convert string to float number
-};
+document.getElementById('EditBoxOut').innerHTML ='You Typed: '+userHeight;
+console.log('heightSubmit: userHeight:', userHeight); // print in console, and
+
+
+if (new_height >= 10){
+  userHeight =10;
+}
+
+else if (new_height <= 0){
+  userHeight =0;
+}
+
+else{
+  userHeight = new_height;
+}
+}
+
+function animateHeight(current, now){
+var elapsed = now - g_last;
+g_last = now;
+
+var new_height;
+
+
+  if (current > userHeight){
+
+    new_height = current - (height_steps * elapsed)/2 ;
+    console.log("current height is "+current);
+  }
+
+
+else if (current < userHeight){
+
+    new_height = current + (height_steps * elapsed)/2 ;
+    console.log("current height is "+current);
+}
+
+else {
+  new_height = current;
+}
+
+return new_height;
+}
+
+
+
 
 function clearDrag() {
 // Called when user presses 'Clear' button in our webpage
@@ -2228,6 +2519,19 @@ function runStop() {
 	document.getElementById('MouseAtResult').innerHTML =
 	  'Mouse At: '+x.toFixed(5)+', '+y.toFixed(5);
 };
+
+  function resetHeight(){
+
+    if(userHeight!=0){
+      userHeight=0;
+      currentHeight = 0;
+    }
+
+  }
+
+
+
+
 
   function myMouseMove(ev) {
 
