@@ -1052,13 +1052,13 @@ function drawAll(){
   						gl.drawingBufferHeight);			// viewport height in pixels.
 
   var vpAspect = gl.drawingBufferWidth /			// On-screen aspect ratio for
-								gl.drawingBufferHeight;		// this camera: width/height.
+								(gl.drawingBufferHeight*2);		// this camera: width/height.
 
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
   modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
+                           vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1156,7 +1156,7 @@ function drawAll(){
 
  modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
   modelMatrix.setPerspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
+                           vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1238,7 +1238,7 @@ function drawAll(){
 	//===================Draw Third OBJECT(Helicopter):
 	modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
+                           vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1250,35 +1250,103 @@ function drawAll(){
   	modelMatrix.scale(0.1, 0.1, 0.1);				// shrink by 10X:
 
 	//drawGrid();
-	modelMatrix.translate(30,-30, 0.0);
+    modelMatrix.rotate(90, 0, 1, 0);
+	modelMatrix.translate(-8,-50,0);
 	modelMatrix.scale(6,6,6);
-  modelMatrix.translate(0,0,-currentHeight);
-	modelMatrix.rotate(90, 0, 1, 0);
-	//modelMatrix.rotate(-120, 0, 0, 1);
-	//modelMatrix.rotate(g_angle01, 0,1,1);
-	// Drawing:
-  // Pass our current matrix to the vertex shaders:
-    drawCylinder2();
+    modelMatrix.translate(currentHeight,0,0);
+	drawCylinder2();
+	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
+  
 
 	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
-
-	modelMatrix.translate(0,0, -1.8);
-	modelMatrix.scale(0.8, 0.8, 0.8);
-	//modelMatrix.rotate(, 0, 0, 1);
-	//modelMatrix.rotate(g_angle01, 0,1,1);
-	// Drawing:
-  // Pass our current matrix to the vertex shaders:
-    drawCylinder();
-
+	modelMatrix.translate(0,0,-2);
+	modelMatrix.scale(0.4,0.4,1);
+	drawCylinder2();
+	
+	modelMatrix.rotate(-90, 0, 1, 0);
+	modelMatrix.translate(-1.2,0,0);
+	modelMatrix.scale(0.2,0.4,0.5);
+	drawSphere();
+	
+	modelMatrix.rotate(-30, 0, 1, 0);
+	modelMatrix.rotate(90, 0, 0, 1);
+    modelMatrix.translate(1,1.9,3);
+	modelMatrix.scale(1,1,4);
+	drawCylinder2();
+	
+	modelMatrix.rotate(90, 0, 0, 1);
+	modelMatrix.translate(0,0,1.25);
+	modelMatrix.scale(1,1,0.25);
+	drawSphere()
+	
+	modelMatrix.rotate(90, 1, 0, 0);
+	modelMatrix.translate(0,0,2.5);
+	modelMatrix.scale(0.5,0.5,1.5);
+	drawCylinder2();
+	
+	modelMatrix.translate(0,0,1.25);
+	modelMatrix.scale(0.8,0.8,0.8/3);
+	modelMatrix.rotate(-g_angle01,0,0,1);
+	drawSphere();
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
+	modelMatrix.rotate(90,1,0,0);
+	modelMatrix.translate(0,0,-4.1);
+	modelMatrix.scale(0.4,0.4,4.8/3);
+	drawCylinder();
+	
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
+	modelMatrix.rotate(-90,1,0,0);
+	modelMatrix.translate(0,0,-4.1);
+	modelMatrix.scale(0.4,0.4,4.8/3);
+	drawCylinder();
+	
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
+	modelMatrix.rotate(-90,0,1,0);
+	modelMatrix.translate(0,0,-4.1);
+	modelMatrix.scale(0.4,0.4,4.8/3);
+	drawCylinder();
+	
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
+	modelMatrix.rotate(90,0,1,0);
+	modelMatrix.translate(0,0,-4.1);
+	modelMatrix.scale(0.4,0.4,4.8/3);
+	drawCylinder();
+	
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	
+	
+	
+	
+	modelMatrix.rotate(g_angle01,0,0,1);
+	modelMatrix.rotate(30, 0, 0, 1);
+	modelMatrix.rotate(90,0,1,0);
+	modelMatrix.rotate(-90,0,0,1);
+	modelMatrix.rotate(-90,0,1,0);
+	modelMatrix.translate(-70,13,-15);
+	modelMatrix.scale(12, 12, 12);
+    drawSphere();
+	
+	modelMatrix.translate(1.3,0,1.3);
+	modelMatrix.scale(0.3, 0.3, 0.3);
+	drawCylinder2();
+	
+    pushMatrix(modelMatrix);
   //===========================================================
   //
 	//modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
 	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
 	
 
-	modelMatrix.translate(-1.65,0,2);
-	modelMatrix.scale(0.4, 0.4, 0.4);
-	modelMatrix.rotate(90, 0,1,0);
+	modelMatrix.translate(0,0,2.0);
+	modelMatrix.scale(1, 1, 1);
+	modelMatrix.rotate(90, 0,0,1);
 	modelMatrix.rotate(g_angle01, 0,0,1);
 	drawSphere();
 
@@ -1324,7 +1392,7 @@ function drawAll(){
 	  //draw tower1
     modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
+                           vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1444,7 +1512,7 @@ function drawAll(){
     //draw tower1
     modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
+                           vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1562,7 +1630,7 @@ function drawAll(){
     //draw tower1
     modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
     modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
-                           1.0,   // Image Aspect Ratio: camera lens width/height
+                           vpAspect,   // Image Aspect Ratio: camera lens width/height
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
@@ -1675,9 +1743,26 @@ function drawAll(){
   drawTentacle();
 
 
-  
+  //===================Draw Seventh OBJECT(WindMill):
 
 
+    modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+    modelMatrix.perspective(40.0,   // FOVY: top-to-bottom vertical image angle, in degrees
+                           vpAspect,   // Image Aspect Ratio: camera lens width/height
+                           1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+
+    modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+                     g_atX, g_atY, g_lookZ,      // look-at point
+                      0.0,  0.0,  1.0);     // 'up' vector
+					  
+	var dist = Math.sqrt(g_xMdragTot*g_xMdragTot + g_yMdragTot*g_yMdragTot);
+    modelMatrix.translate(7,-4,10);
+	modelMatrix.scale(0.5, 0.5, 0.5);
+	modelMatrix.rotate(dist*120.0, -g_yMdragTot+0.0001, g_xMdragTot+0.0001, 0.0);
+	drawTorus();
+	modelMatrix.scale(2, 2, 2);
+	drawAxes();
 
 
 
@@ -1710,10 +1795,10 @@ function drawAll(){
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.ortho(-5,5,
-					-5,5  // FOVY: top-to-bottom vertical image angle, in degrees
-					,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+  modelMatrix.ortho(-333*gl.drawingBufferWidth/70000,333*gl.drawingBufferWidth/70000,
+					-333*gl.drawingBufferHeight*2/70000,333*gl.drawingBufferHeight*2/70000 // FOVY: top-to-bottom vertical image angle, in degrees
+					,-100,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
 
 
@@ -1728,7 +1813,7 @@ function drawAll(){
 
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     g_lookX, g_lookY, g_lookZ,      // look-at point
+                     g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
        // SAVE world coord system;
@@ -1802,13 +1887,13 @@ function drawAll(){
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.ortho(-5,5,
-					-5,5  // FOVY: top-to-bottom vertical image angle, in degrees
-					,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+  modelMatrix.ortho(-333*gl.drawingBufferWidth/70000,333*gl.drawingBufferWidth/70000,
+					-333*gl.drawingBufferHeight*2/70000,333*gl.drawingBufferHeight*2/70000 // FOVY: top-to-bottom vertical image angle, in degrees
+					,-100,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     g_lookX, g_lookY, g_lookZ,      // look-at point
+                     g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
        // SAVE world coord system;
@@ -1880,13 +1965,13 @@ function drawAll(){
 
 
   modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-  modelMatrix.ortho(-5,5,
-					-5,5  // FOVY: top-to-bottom vertical image angle, in degrees
-					,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
-
+  modelMatrix.ortho(-333*gl.drawingBufferWidth/70000,333*gl.drawingBufferWidth/70000,
+					-333*gl.drawingBufferHeight*2/70000,333*gl.drawingBufferHeight*2/70000 // FOVY: top-to-bottom vertical image angle, in degrees
+					,-100,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+						
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     g_lookX, g_lookY, g_lookZ,      // look-at point
+                      g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
 	//modelMatrix.translate( 0.4, -0.4, 0.0);
@@ -1900,32 +1985,103 @@ function drawAll(){
 
 	//pushMatrix(modelMatrix);
 	
-	modelMatrix.translate(30,-30, 0.0);
-	modelMatrix.scale(6, 6, 6);
-  modelMatrix.translate(0,0,-currentHeight);
 	modelMatrix.rotate(90, 0, 1, 0);
-	//modelMatrix.rotate(-120, 0, 0, 1);
-	//modelMatrix.rotate(g_angle01, 0,1,1);
-	// Drawing:
-  // Pass our current matrix to the vertex shaders:
-    drawCylinder2();
-
+	modelMatrix.translate(-8,-50,0);
+	modelMatrix.scale(5,5,5);
+    modelMatrix.translate(currentHeight,0,0);
+	drawCylinder2();
+	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
+  
 
 	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
-
-	modelMatrix.translate(0,0, -1.8);
-	modelMatrix.scale(0.8, 0.8, 0.8);
-	//modelMatrix.rotate(, 0, 0, 1);
-	//modelMatrix.rotate(g_angle01, 0,1,1);
-	// Drawing:
-  // Pass our current matrix to the vertex shaders:
-    drawCylinder();
-
+	modelMatrix.translate(0,0,-2);
+	modelMatrix.scale(0.4,0.4,1);
+	drawCylinder2();
+	
+	modelMatrix.rotate(-90, 0, 1, 0);
+	modelMatrix.translate(-1.2,0,0);
+	modelMatrix.scale(0.2,0.4,0.5);
+	drawSphere();
+	
+	modelMatrix.rotate(-30, 0, 1, 0);
+	modelMatrix.rotate(90, 0, 0, 1);
+    modelMatrix.translate(1,1.9,3);
+	modelMatrix.scale(1,1,4);
+	drawCylinder2();
+	
+	modelMatrix.rotate(90, 0, 0, 1);
+	modelMatrix.translate(0,0,1.25);
+	modelMatrix.scale(1,1,0.25);
+	drawSphere()
+	
+	modelMatrix.rotate(90, 1, 0, 0);
+	modelMatrix.translate(0,0,2.5);
+	modelMatrix.scale(0.5,0.5,1.5);
+	drawCylinder2();
+	
+	modelMatrix.translate(0,0,1.25);
+	modelMatrix.scale(0.8,0.8,0.8/3);
+	modelMatrix.rotate(-g_angle01,0,0,1);
+	drawSphere();
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
+	modelMatrix.rotate(90,1,0,0);
+	modelMatrix.translate(0,0,-4.1);
+	modelMatrix.scale(0.4,0.4,4.8/3);
+	drawCylinder();
+	
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
+	modelMatrix.rotate(-90,1,0,0);
+	modelMatrix.translate(0,0,-4.1);
+	modelMatrix.scale(0.4,0.4,4.8/3);
+	drawCylinder();
+	
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
+	modelMatrix.rotate(-90,0,1,0);
+	modelMatrix.translate(0,0,-4.1);
+	modelMatrix.scale(0.4,0.4,4.8/3);
+	drawCylinder();
+	
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
+	modelMatrix.rotate(90,0,1,0);
+	modelMatrix.translate(0,0,-4.1);
+	modelMatrix.scale(0.4,0.4,4.8/3);
+	drawCylinder();
+	
+	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
+	
+	
+	
+	
+	modelMatrix.rotate(g_angle01,0,0,1);
+	modelMatrix.rotate(30, 0, 0, 1);
+	modelMatrix.rotate(90,0,1,0);
+	modelMatrix.rotate(-90,0,0,1);
+	modelMatrix.rotate(-90,0,1,0);
+	modelMatrix.translate(-70,13,-15);
+	modelMatrix.scale(12, 12, 12);
+    drawSphere();
+	
+	modelMatrix.translate(1.3,0,1.3);
+	modelMatrix.scale(0.3, 0.3, 0.3);
+	drawCylinder2();
+	
+    pushMatrix(modelMatrix);
+  //===========================================================
+  //
+	//modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
 	//pushMatrix(modelMatrix);  // SAVE world drawing coords.
+	
 
-	modelMatrix.translate(-1.65,0,2);
-	modelMatrix.scale(0.4, 0.4, 0.4);
-	modelMatrix.rotate(90, 0,1,0);
+	modelMatrix.translate(0,0,2.0);
+	modelMatrix.scale(1, 1, 1);
+	modelMatrix.rotate(90, 0,0,1);
 	modelMatrix.rotate(g_angle01, 0,0,1);
 	drawSphere();
 
@@ -1948,7 +2104,7 @@ function drawAll(){
 
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
     pushMatrix(modelMatrix);  // SAVE world drawing coords.
-  
+	
     modelMatrix.translate(0,-3, 0);
 	modelMatrix.scale(0.5, 3, 0.5);
 	modelMatrix.rotate(-90, 1, 0, 0);
@@ -1967,16 +2123,16 @@ function drawAll(){
 
 	//===================Draw Fourth OBJECT(Rectangle):
 	
-	
-	modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-	modelMatrix.ortho(-5,5,
-					-5,5  // FOVY: top-to-bottom vertical image angle, in degrees
-					,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+  modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+  modelMatrix.ortho(-333*gl.drawingBufferWidth/70000,333*gl.drawingBufferWidth/70000,
+					-333*gl.drawingBufferHeight*2/70000,333*gl.drawingBufferHeight*2/70000 // FOVY: top-to-bottom vertical image angle, in degrees
+					,-100,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
     modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
-                     g_lookX, g_lookY, g_lookZ,      // look-at point
+                     g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
+	
 
   //draw tower
 	//modelMatrix.translate( 0.4, -0.4, 0.0);
@@ -2085,11 +2241,11 @@ function drawAll(){
 
   //===================Draw Fifth OBJECT(Rectangle):
     //draw tower1
-    modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-    modelMatrix.ortho(-5,5,
-          -5,5  // FOVY: top-to-bottom vertical image angle, in degrees
-          ,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+  modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+  modelMatrix.ortho(-333*gl.drawingBufferWidth/70000,333*gl.drawingBufferWidth/70000,
+					-333*gl.drawingBufferHeight*2/70000,333*gl.drawingBufferHeight*2/70000 // FOVY: top-to-bottom vertical image angle, in degrees
+					,-100,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
     modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
@@ -2203,11 +2359,11 @@ function drawAll(){
 
   //===================Draw Sixth OBJECT(Rectangle):
     //draw tower1
-    modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
-    modelMatrix.ortho(-5,5,
-          -5,5  // FOVY: top-to-bottom vertical image angle, in degrees
-          ,-30,   // camera z-near distance (always positive; frustum begins at z = -znear)
-                        30);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+  modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+  modelMatrix.ortho(-333*gl.drawingBufferWidth/70000,333*gl.drawingBufferWidth/70000,
+					-333*gl.drawingBufferHeight*2/70000,333*gl.drawingBufferHeight*2/70000 // FOVY: top-to-bottom vertical image angle, in degrees
+					,-100,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
     modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
@@ -2317,6 +2473,27 @@ function drawAll(){
   // modelMatrix.scale(0.09, 0.45, 0.09);
   drawTentacle();
 
+
+  //===================Draw Seventh OBJECT(WindMill):
+
+
+  modelMatrix.setIdentity();    // DEFINE 'world-space' coords.
+  modelMatrix.ortho(-333*gl.drawingBufferWidth/70000,333*gl.drawingBufferWidth/70000,
+					-333*gl.drawingBufferHeight*2/70000,333*gl.drawingBufferHeight*2/70000 // FOVY: top-to-bottom vertical image angle, in degrees
+					,-100,   // camera z-near distance (always positive; frustum begins at z = -znear)
+                        100);  // camera z-far distance (always positive; frustum ends at z = -zfar)
+
+    modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+                     g_atX, g_atY, g_lookZ,      // look-at point
+                      0.0,  0.0,  1.0);     // 'up' vector
+					  
+	var dist = Math.sqrt(g_xMdragTot*g_xMdragTot + g_yMdragTot*g_yMdragTot);
+    modelMatrix.translate(7,-4,10);
+	modelMatrix.scale(0.5, 0.5, 0.5);
+	modelMatrix.rotate(dist*120.0, -g_yMdragTot+0.0001, g_xMdragTot+0.0001, 0.0);
+	drawTorus();
+	modelMatrix.scale(2, 2, 2);
+	drawAxes();
 }
 
 
