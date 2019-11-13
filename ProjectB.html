@@ -2,14 +2,38 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Basic Shapes</title>
+    <title>City</title>
   </head>
 	<!--	Create the HTML5 'canvas' element in which we will run WebGL
 	-->
   <body onload="main()">
+
+
+<h1>Welcome to the City of Chicago ~~ </h1>
+
+
+
+    	<p> Chicago is famous for its city architecture, Last time I made a simple colorful model for Willis Tower, this time I made it possible for you to discover with a 3d camera that you can move around the space, please follow the instructions below, enjoy  :) ~<p> 
+
+    
+    	
+    	<p1>Instructions:</p1>
+
+
+    	<p>use "W,A,S,D" to move around in the space</p>
+    	<p>arrow keys to turn your head around</p>
+    	<p>The RPM can be customized by user input, or click the buttons to increase/decrease</p>
+		<p>If the RPM >= 800, the holicopter will take off, and once RPM <= 800, it will start returning back to ground</p>
+		<p>Click "Reset Helicopter" to reset the position of the helicopter</p></p>
+
+
+
+
     <canvas id="webgl" width="700" height="700">
     Please use a browser that supports "canvas"
     </canvas>
+
+
 	<p>
 	<!-- Make a 'div' element to hold changeable HTML made in our JavaScript file;
 		 (where? look inside main(), inside its 'tick()' function, where we
@@ -54,7 +78,7 @@
 			Spin <<, runStop, and Spin >>.  
 		When users click the button, HTML calls JavaScript functions
 			"spinDown()", "runStop()" and "spinUp()"   -->
-      <button type="button" onclick="resetHeight()">Reset Helicopter << </button>
+      <button type="button" onclick="resetHeight()">Reset Helicopter</button>
       <button type="button" onclick="spinDown()">Spin << </button>
 	  <button type="button" onclick="runStop()">Run/Stop</button>
       <button type="button" onclick="spinUp()">Spin >> </button>
@@ -72,3 +96,30 @@
     <script src="ProjectB.js"></script>
   </body>
 </html>
+
+<style type="text/css">
+
+
+	
+	h1{
+		color: burlywood;
+		font-size: 50px;
+	}
+
+	p1{
+		color: cadetblue;
+		font-size: 35px;
+	}
+
+	.buttons{
+		border-radius: 10px;
+		font-size: 15px;
+		color: darkcyan;
+	}
+
+
+	body {
+    font-family:'Helvetica Neue';
+    font-size: 20px;
+	}
+</style>

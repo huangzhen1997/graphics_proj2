@@ -90,7 +90,7 @@ function main() {
   }
 
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearColor(0.0, 0.5, 0.5, 1.0);
 
 	// NEW!! Enable 3D depth-test when drawing: don't over-draw at any pixel
 	// unless the new Z value is closer to the eye than the old one..
