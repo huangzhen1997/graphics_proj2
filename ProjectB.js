@@ -48,6 +48,11 @@ var g_xMclik=0.0;			// last mouse button-down position (in CVV coords)
 var g_yMclik=0.0;
 var g_xMdragTot=0.0;	// total (accumulated) mouse-drag amounts (in CVV coords).
 var g_yMdragTot=0.0;
+var qNew = new Quaternion(0,0,0,1); // most-recent mouse drag's rotation
+var qTot = new Quaternion(0,0,0,1);	// 'current' orientation (made from qNew)
+var quatMatrix = new Matrix4();				// rotation matrix, made from latest qTot
+
+
 var g_EyeX = -5.20, g_EyeY = 1.25, g_EyeZ = 1.2;
 var g_lookX =1;
 var g_lookY =1;
@@ -63,6 +68,11 @@ function main() {
    window.addEventListener("mouseup", myMouseUp);
 	window.addEventListener("click", myMouseClick);
 	window.addEventListener("dblclick", myMouseDblClick);
+	//canvas.onmousedown	=	function(ev){myMouseDown( ev, gl, canvas) }; 
+  					// when user's mouse button goes down, call mouseDown() function
+    //canvas.onmousemove = 	function(ev){myMouseMove( ev, gl, canvas) };
+											// when the mouse moves, call mouseMove() function					
+    //canvas.onmouseup = 		function(ev){myMouseUp(   ev, gl, canvas)};
 
   // Retrieve <canvas> element
   var myCanvas = document.getElementById('webgl');
@@ -1756,10 +1766,11 @@ function drawAll(){
                      g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 					  
-	var dist = Math.sqrt(g_xMdragTot*g_xMdragTot + g_yMdragTot*g_yMdragTot);
+
     modelMatrix.translate(7,-4,10);
 	modelMatrix.scale(0.5, 0.5, 0.5);
-	modelMatrix.rotate(dist*120.0, -g_yMdragTot+0.0001, g_xMdragTot+0.0001, 0.0);
+	quatMatrix.setFromQuat(qTot.x, qTot.y, qTot.z, qTot.w);	// Quaternion-->Matrix
+	modelMatrix.concat(quatMatrix);	// apply that matrix.
 	drawTorus();
 	modelMatrix.scale(2, 2, 2);
 	drawAxes();
@@ -2487,10 +2498,10 @@ function drawAll(){
                      g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 					  
-	var dist = Math.sqrt(g_xMdragTot*g_xMdragTot + g_yMdragTot*g_yMdragTot);
     modelMatrix.translate(7,-4,10);
 	modelMatrix.scale(0.5, 0.5, 0.5);
-	modelMatrix.rotate(dist*120.0, -g_yMdragTot+0.0001, g_xMdragTot+0.0001, 0.0);
+	quatMatrix.setFromQuat(qTot.x, qTot.y, qTot.z, qTot.w);	// Quaternion-->Matrix
+	modelMatrix.concat(quatMatrix);	// apply that matrix.
 	drawTorus();
 	modelMatrix.scale(2, 2, 2);
 	drawAxes();
@@ -2717,11 +2728,12 @@ function runStop() {
 	// find how far we dragged the mouse:
 	g_xMdragTot += (x - g_xMclik);					// Accumulate change-in-mouse-position,&
 	g_yMdragTot += (y - g_yMclik);
+	dragQuat(x - g_xMclik, y - g_yMclik);
 	// Report new mouse position & how far we moved on webpage:
 	document.getElementById('MouseAtResult').innerHTML =
-	  'Mouse At: '+x.toFixed(5)+', '+y.toFixed(5);
-	document.getElementById('MouseDragResult').innerHTML =
-	  'Mouse Drag: '+(x - g_xMclik).toFixed(5)+', '+(y - g_yMclik).toFixed(5);
+	  'Mouse Drag totals (CVV x,y coords):\t'+g_xMdragTot.toFixed(5)+', '+g_yMdragTot.toFixed(5);
+	/*document.getElementById('MouseDragResult').innerHTML =
+	  'Mouse Drag: '+(x - g_xMclik).toFixed(5)+', '+(y - g_yMclik).toFixed(5);*/
 
 	g_xMclik = x;													// Make next drag-measurement from here.
 	g_yMclik = y;
@@ -2751,9 +2763,12 @@ function myMouseUp(ev) {
 	// accumulate any final bit of mouse-dragging we did:
 	g_xMdragTot += (x - g_xMclik);
 	g_yMdragTot += (y - g_yMclik);
+	dragQuat(x - g_xMclik, y - g_yMclik);
 	// Report new mouse position:
 	document.getElementById('MouseAtResult').innerHTML =
-	  'Mouse At: '+x.toFixed(5)+', '+y.toFixed(5);
+	 'Mouse Drag totals (CVV x,y coords):\t'+
+			 g_xMdragTot.toFixed(5)+', \t'+
+			 g_yMdragTot.toFixed(5);	
 	console.log('myMouseUp: g_xMdragTot,g_yMdragTot =',g_xMdragTot,',\t',g_yMdragTot);
 };
 
@@ -2773,6 +2788,52 @@ function myMouseClick(ev) {
   // STUB
 	console.log("myMouseClick() on button: ", ev.button);
 }
+
+function dragQuat(xdrag, ydrag) {
+//==============================================================================
+// Called when user drags mouse by 'xdrag,ydrag' as measured in CVV coords.
+// We find a rotation axis perpendicular to the drag direction, and convert the 
+// drag distance to an angular rotation amount, and use both to set the value of 
+// the quaternion qNew.  We then combine this new rotation with the current 
+// rotation stored in quaternion 'qTot' by quaternion multiply.  Note the 
+// 'draw()' function converts this current 'qTot' quaternion to a rotation 
+// matrix for drawing. 
+	var res = 5;
+	var qTmp = new Quaternion(0,0,0,1);
+	
+	var dist = Math.sqrt(xdrag*xdrag + ydrag*ydrag);
+	// console.log('xdrag,ydrag=',xdrag.toFixed(5),ydrag.toFixed(5),'dist=',dist.toFixed(5));
+	qNew.setFromAxisAngle(-ydrag + 0.0001, xdrag + 0.0001, 0.0, dist*150.0);
+	// (why add tiny 0.0001? To ensure we never have a zero-length rotation axis)
+							// why axis (x,y,z) = (-yMdrag,+xMdrag,0)? 
+							// -- to rotate around +x axis, drag mouse in -y direction.
+							// -- to rotate around +y axis, drag mouse in +x direction.
+							
+	qTmp.multiply(qNew,qTot);			// apply new rotation to current rotation. 
+	//--------------------------
+	// IMPORTANT! Why qNew*qTot instead of qTot*qNew? (Try it!)
+	// ANSWER: Because 'duality' governs ALL transformations, not just matrices. 
+	// If we multiplied in (qTot*qNew) order, we would rotate the drawing axes
+	// first by qTot, and then by qNew--we would apply mouse-dragging rotations
+	// to already-rotated drawing axes.  Instead, we wish to apply the mouse-drag
+	// rotations FIRST, before we apply rotations from all the previous dragging.
+	//------------------------
+	// IMPORTANT!  Both qTot and qNew are unit-length quaternions, but we store 
+	// them with finite precision. While the product of two (EXACTLY) unit-length
+	// quaternions will always be another unit-length quaternion, the qTmp length
+	// may drift away from 1.0 if we repeat this quaternion multiply many times.
+	// A non-unit-length quaternion won't work with our quaternion-to-matrix fcn.
+	// Matrix4.prototype.setFromQuat().
+//	qTmp.normalize();						// normalize to ensure we stay at length==1.0.
+	qTot.copy(qTmp);
+	// show the new quaternion qTot on our webpage in the <div> element 'QuatValue'
+	document.getElementById('MouseDragResult').innerHTML= 
+														 '\t X=' +qTot.x.toFixed(res)+
+														'i\t Y=' +qTot.y.toFixed(res)+
+														'j\t Z=' +qTot.z.toFixed(res)+
+														'k\t W=' +qTot.w.toFixed(res)+
+														'<br>length='+qTot.length().toFixed(res);
+};
 
 function myMouseDblClick(ev) {
 //=============================================================================
