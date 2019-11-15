@@ -129,12 +129,11 @@ function tick(){
     animate();  // Update the rotation angle
     drawAll();   // Draw shapes
 	
-	document.getElementById('current_rpm').innerHTML=
-			'Current RPM = '+ANGLE_STEP.toFixed(5);
+	ANGLE_STEP.toFixed(5);
 		 //Also display our current mouse-dragging state:
-		document.getElementById('Mouse').innerHTML=
-			'Mouse Drag totals (CVV coords):\t'+
-			g_xMdragTot.toFixed(5)+', \t'+g_yMdragTot.toFixed(5);
+		
+	g_xMdragTot.toFixed(5);
+	g_yMdragTot.toFixed(5);
     // report current angle on console
     //console.log('currentAngle=',currentAngle);
     requestAnimationFrame(tick, canvas);
@@ -2595,9 +2594,6 @@ var new_height = parseFloat(document.getElementById('usrHeight').value);
 console.log("To reach is "+userHeight);
 // Display what we read from the edit-box: use it to fill up
 // the HTML 'div' element with id='editBoxOut':
-document.getElementById('EditBoxOut').innerHTML ='You Typed: '+userHeight;
-console.log('heightSubmit: userHeight:', userHeight); // print in console, and
-
 
 ANGLE_STEP = new_height;
 
@@ -2690,8 +2686,9 @@ function runStop() {
 	g_xMclik = x;													// record where mouse-dragging began
 	g_yMclik = y;
 	// report on webpage
-	document.getElementById('MouseAtResult').innerHTML =
-	  'Mouse At: '+x.toFixed(5)+', '+y.toFixed(5);
+	
+	x.toFixed(5);
+	y.toFixed(5);
 };
 
   function resetHeight(){
@@ -2730,8 +2727,9 @@ function runStop() {
 	g_yMdragTot += (y - g_yMclik);
 	dragQuat(x - g_xMclik, y - g_yMclik);
 	// Report new mouse position & how far we moved on webpage:
-	document.getElementById('MouseAtResult').innerHTML =
-	  'Mouse Drag totals (CVV x,y coords):\t'+g_xMdragTot.toFixed(5)+', '+g_yMdragTot.toFixed(5);
+	
+	g_xMdragTot.toFixed(5);
+	g_yMdragTot.toFixed(5);
 	/*document.getElementById('MouseDragResult').innerHTML =
 	  'Mouse Drag: '+(x - g_xMclik).toFixed(5)+', '+(y - g_yMclik).toFixed(5);*/
 
@@ -2765,11 +2763,10 @@ function myMouseUp(ev) {
 	g_yMdragTot += (y - g_yMclik);
 	dragQuat(x - g_xMclik, y - g_yMclik);
 	// Report new mouse position:
-	document.getElementById('MouseAtResult').innerHTML =
-	 'Mouse Drag totals (CVV x,y coords):\t'+
-			 g_xMdragTot.toFixed(5)+', \t'+
-			 g_yMdragTot.toFixed(5);	
-	console.log('myMouseUp: g_xMdragTot,g_yMdragTot =',g_xMdragTot,',\t',g_yMdragTot);
+	
+	g_xMdragTot.toFixed(5)
+	g_yMdragTot.toFixed(5);	
+	
 };
 
 function myMouseClick(ev) {
@@ -2827,12 +2824,12 @@ function dragQuat(xdrag, ydrag) {
 //	qTmp.normalize();						// normalize to ensure we stay at length==1.0.
 	qTot.copy(qTmp);
 	// show the new quaternion qTot on our webpage in the <div> element 'QuatValue'
-	document.getElementById('MouseDragResult').innerHTML= 
-														 '\t X=' +qTot.x.toFixed(res)+
-														'i\t Y=' +qTot.y.toFixed(res)+
-														'j\t Z=' +qTot.z.toFixed(res)+
-														'k\t W=' +qTot.w.toFixed(res)+
-														'<br>length='+qTot.length().toFixed(res);
+	
+	qTot.x.toFixed(res)
+	qTot.y.toFixed(res)
+	qTot.z.toFixed(res)
+	qTot.w.toFixed(res)
+	qTot.length().toFixed(res);
 };
 
 function myMouseDblClick(ev) {
@@ -2868,19 +2865,11 @@ function myKeyDown(kev) {
               "\n--kev.altKey:",  kev.altKey,   "\t--kev.metaKey:", kev.metaKey);
 
 // and report EVERYTHING on webpage:
-	document.getElementById('KeyDownResult').innerHTML = ''; // clear old results
-  document.getElementById('KeyModResult' ).innerHTML = '';
-  // key details:
-  document.getElementById('KeyModResult' ).innerHTML =
-        "   --kev.code:"+kev.code   +"      --kev.key:"+kev.key+
-    "<br>--kev.ctrlKey:"+kev.ctrlKey+" --kev.shiftKey:"+kev.shiftKey+
-    "<br>--kev.altKey:"+kev.altKey +"  --kev.metaKey:"+kev.metaKey;
-
+	
 	switch(kev.code) {
 		case "KeyP":
-			console.log("Pause/unPause!\n");                // print on console,
-			document.getElementById('KeyDownResult').innerHTML =
-			'myKeyDown() found p/P key. Pause/unPause!';   // print on webpage
+			
+
 			if(g_isRun==true) {
 			  g_isRun = false;    // STOP animation
 			  }
@@ -2892,50 +2881,50 @@ function myKeyDown(kev) {
 		//------------------WASD navigation-----------------
 		case "KeyA":
 			console.log("a/A key: Strafe LEFT!\n");
-			document.getElementById('KeyDownResult').innerHTML =
-			'myKeyDown() found a/A key. Strafe LEFT!';
+			
+
 			break;
     case "KeyD":
 			console.log("d/D key: Strafe RIGHT!\n");
-			document.getElementById('KeyDownResult').innerHTML =
-			'myKeyDown() found d/D key. Strafe RIGHT!';
+			
+
 			break;
 		case "KeyS":
 			console.log("s/S key: Move BACK!\n");
-			document.getElementById('KeyDownResult').innerHTML =
-			'myKeyDown() found s/Sa key. Move BACK.';
+			
+
 			break;
 		case "KeyW":
 			console.log("w/W key: Move FWD!\n");
-			document.getElementById('KeyDownResult').innerHTML =
-			'myKeyDown() found w/W key. Move FWD!';
+			
+
 			break;
 		//----------------Arrow keys------------------------
 		case "ArrowLeft":
 			console.log(' left-arrow.');
 			// and print on webpage in the <div> element with id='Result':
-  		document.getElementById('KeyDownResult').innerHTML =
-  			'myKeyDown(): Left Arrow='+kev.keyCode;
+  		
+
 			break;
 		case "ArrowRight":
 			console.log('right-arrow.');
-  		document.getElementById('KeyDownResult').innerHTML =
-  			'myKeyDown():Right Arrow:keyCode='+kev.keyCode;
+  		
+
   		break;
 		case "ArrowUp":
 			console.log('   up-arrow.');
-  		document.getElementById('KeyDownResult').innerHTML =
-  			'myKeyDown():   Up Arrow:keyCode='+kev.keyCode;
+  		
+
 			break;
 		case "ArrowDown":
 			console.log(' down-arrow.');
-  		document.getElementById('KeyDownResult').innerHTML =
-  			'myKeyDown(): Down Arrow:keyCode='+kev.keyCode;
+  		
+
   		break;
     default:
       console.log("UNUSED!");
-  		document.getElementById('KeyDownResult').innerHTML =
-  			'myKeyDown(): UNUSED!';
+  		
+  		
       break;
 	}
 }
