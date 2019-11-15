@@ -1570,7 +1570,7 @@ function drawAll(){
                            1.0,   // camera z-near distance (always positive; frustum begins at z = -znear)
                         100.0);  // camera z-far distance (always positive; frustum ends at z = -zfar)
 
-  modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
+    modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
 
@@ -1685,7 +1685,31 @@ function drawAll(){
 	modelMatrix.rotate(90, 0, 1, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
-
+	modelMatrix.translate(0,0,4.15);
+	modelMatrix.scale(1, 1, 1/6);
+	modelMatrix.rotate(g_angle01, 0, 0, 1);
+	drawSphere();
+	modelMatrix.translate(-2.8,0, 0);
+	modelMatrix.scale(1, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
     pushMatrix(modelMatrix);  // SAVE world drawing coords.
 	
@@ -1694,7 +1718,32 @@ function drawAll(){
 	modelMatrix.rotate(90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
-
+	modelMatrix.translate(0,0,4.15);
+	modelMatrix.scale(1, 1, 1/6);
+	modelMatrix.rotate(g_angle01, 0, 0, 1);
+	drawSphere();
+	modelMatrix.translate(-2.8,0, 0);
+	modelMatrix.scale(1, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	
+	
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
     pushMatrix(modelMatrix);  // SAVE world drawing coords.
 	
@@ -1703,7 +1752,32 @@ function drawAll(){
 	modelMatrix.rotate(-90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
-
+	modelMatrix.translate(0,0,4.15);
+	modelMatrix.scale(1, 1, 1/6);
+	modelMatrix.rotate(g_angle01, 0, 0, 1);
+	drawSphere();
+	modelMatrix.translate(-2.8,0, 0);
+	modelMatrix.scale(1, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	
+	
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
     pushMatrix(modelMatrix);  // SAVE world drawing coords.
 	
@@ -1712,6 +1786,31 @@ function drawAll(){
 	modelMatrix.rotate(-90, 0, 1, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
+	modelMatrix.translate(0,0,4.15);
+	modelMatrix.scale(1, 1, 1/6);
+	modelMatrix.rotate(g_angle01, 0, 0, 1);
+	drawSphere();
+	modelMatrix.translate(-2.8,0, 0);
+	modelMatrix.scale(1, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	
 	
 	//modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
 
@@ -2703,12 +2802,60 @@ function drawAll(){
 	modelMatrix.rotate(90, 0, 1, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
+	modelMatrix.translate(0,0,4.15);
+	modelMatrix.scale(1, 1, 1/6);
+	modelMatrix.rotate(g_angle01, 0, 0, 1);
+	drawSphere();
+	modelMatrix.translate(-2.8,0, 0);
+	modelMatrix.scale(1, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
 
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
     pushMatrix(modelMatrix);  // SAVE world drawing coords.
 	
     modelMatrix.translate(0,3, 0);
 	modelMatrix.scale(0.5, 3, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,0,4.15);
+	modelMatrix.scale(1, 1, 1/6);
+	modelMatrix.rotate(g_angle01, 0, 0, 1);
+	drawSphere();
+	modelMatrix.translate(-2.8,0, 0);
+	modelMatrix.scale(1, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
 	modelMatrix.rotate(90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
@@ -2721,6 +2868,30 @@ function drawAll(){
 	modelMatrix.rotate(-90, 1, 0, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
+	modelMatrix.translate(0,0,4.15);
+	modelMatrix.scale(1, 1, 1/6);
+	modelMatrix.rotate(g_angle01, 0, 0, 1);
+	drawSphere();
+	modelMatrix.translate(-2.8,0, 0);
+	modelMatrix.scale(1, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
 
 	modelMatrix = popMatrix();  // RESTORE 'world' drawing coords.
     pushMatrix(modelMatrix);  // SAVE world drawing coords.
@@ -2730,6 +2901,31 @@ function drawAll(){
 	modelMatrix.rotate(-90, 0, 1, 0);
 	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
 	drawCylinder();
+	modelMatrix.translate(0,0,4.15);
+	modelMatrix.scale(1, 1, 1/6);
+	modelMatrix.rotate(g_angle01, 0, 0, 1);
+	drawSphere();
+	modelMatrix.translate(-2.8,0, 0);
+	modelMatrix.scale(1, 0.5, 0.5);
+	modelMatrix.rotate(90, 0, 1, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	modelMatrix.translate(0,5.6,2.8);
+	modelMatrix.scale(1, 2, 0.5);
+	modelMatrix.rotate(90, 1, 0, 0);
+	//modelMatrix.rotate(g_angle01*0.8, 0,1,1);
+	drawCylinder();
+	
 
 
 	//===================Draw Fourth OBJECT(Rectangle):
