@@ -2500,7 +2500,7 @@ function drawAll(){
 					  
     modelMatrix.translate(7,-4,10);
 	modelMatrix.scale(0.5, 0.5, 0.5);
-	quatMatrix.setFromQuat(qTot.x, qTot.y, qTot.z, qTot.w);	// Quaternion-->Matrix
+	quatMatrix.setFromQuat(qTot.x/10, qTot.y/10, qTot.z/10, qTot.w);	// Quaternion-->Matrix
 	modelMatrix.concat(quatMatrix);	// apply that matrix.
 	drawTorus();
 	modelMatrix.scale(2, 2, 2);
