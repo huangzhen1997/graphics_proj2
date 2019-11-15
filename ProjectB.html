@@ -49,22 +49,22 @@
 		(e.g. ControlMulti.js, loaded near the end of this file) can access this
 		HTML element by name in the 'tick' function.
 	--><input id='usrHeight' size=10> 
+		<div id ='current_rpm'></div>
 		<button type="button" onClick='heightSubmit()'>Submit</button><BR> 
 		<div id= EditBoxOut></div>
 	</p>
 	
     	
 <hr> <!-- Draw a horizontal-line separator------------->
-	Try keyboard & mouse click/drag inside the canvas, and:
-		
+	
 
 	<!--  Mouse click/drag amounts.  Look in 'console' for event reports;
 			the 'clear' button calls Javascript function 'clearDrag()'
 			whose sole purpose is to set global vars xMdragTot,yMdragTot ==0.0
 		  Note we use these totals to rotate the triangle at upper left.
 	-->
-		<div id='Mouse'> Mouse Drag totals (CVV coords) </div>
-			<button type="button" onClick='clearDrag()'>Clear</button>
+		<div id='Mouse'>  </div>
+		
 	<p>
 		<!--BUTTONS: commands below create HTML push-buttons with labels
 			Spin <<, runStop, and Spin >>.  

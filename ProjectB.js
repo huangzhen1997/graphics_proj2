@@ -122,6 +122,8 @@ function main() {
 function tick(){
   var now = Date.now();
 	var nuCanvas = document.getElementById('webgl');	// get current canvas
+  document.getElementById('current_rpm').innerHTML=
+      'Current RPM = '+ANGLE_STEP;
 	nuCanvas.width = innerWidth;
 	nuCanvas.height = innerHeight*3/4;
 	gl = getWebGLContext(nuCanvas);
@@ -3285,11 +3287,6 @@ return new_height;
 
 
 
-function clearDrag() {
-// Called when user presses 'Clear' button in our webpage
-	g_xMdragTot = 0.0;
-	g_yMdragTot = 0.0;
-}
 
 function spinUp() {
 // Called when user presses the 'Spin >>' button on our webpage.
