@@ -1126,9 +1126,7 @@ function drawAll(){
   // Clear <canvas>  colors AND the depth buffer
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  console.log(gl.drawingBufferWidth);
-  console.log(gl.drawingBufferHeight);
-  
+
   gl.viewport(0,											 				// Viewport lower-left corner
 							0, 			// location(in pixels)
   						gl.drawingBufferWidth/2, 					// viewport width,
@@ -1152,9 +1150,7 @@ function drawAll(){
   g_lookX = g_atX;
   g_lookY =g_atY;
 
-  console.log("The look at x is "+g_atX);
-  console.log("The look at y is "+g_atY);
-  console.log(g_theta);
+
 
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
@@ -2256,8 +2252,6 @@ function drawAll(){
 	//right screen:
 	//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  console.log(gl.drawingBufferWidth);
-  console.log(gl.drawingBufferHeight);
   
   gl.viewport(gl.drawingBufferWidth/2,											 				// Viewport lower-left corner
 							0, 			// location(in pixels)
@@ -2282,14 +2276,15 @@ function drawAll(){
   //g_lookX = g_atX;
   //g_lookY =g_atY;
 
-  console.log("The look at x is "+g_atX);
-  console.log("The look at y is "+g_atY);
-  console.log(g_theta);
 
 
   modelMatrix.lookAt( g_EyeX, g_EyeY, g_EyeZ,      // center of projection
                      g_atX, g_atY, g_lookZ,      // look-at point
                       0.0,  0.0,  1.0);     // 'up' vector
+
+
+
+
 
        // SAVE world coord system;
     modelMatrix.translate( 0.4, -0.4, 0.0);
@@ -3449,7 +3444,7 @@ function heightSubmit() {
 var old_height = currentHeight;
 
 var new_height = parseFloat(document.getElementById('usrHeight').value);
-console.log("To reach is "+userHeight);
+
 // Display what we read from the edit-box: use it to fill up
 // the HTML 'div' element with id='editBoxOut':
 
@@ -3467,7 +3462,7 @@ var new_height;
 if (ANGLE_STEP>=800){
 
     new_height = current + (height_steps * elapsed)/2 ;
-    console.log("current height is "+current);
+  
 }
 else{
 	if(currentHeight < 0 ){
@@ -3608,7 +3603,6 @@ function myMouseUp(ev) {
   						 (canvas.width/2);			// normalize canvas to -1 <= x < +1,
 	var y = (yp - canvas.height/2) /		//										 -1 <= y < +1.
 							 (canvas.height/2);
-	console.log('myMouseUp  (CVV coords  ):  x, y=\t',x,',\t',y);
 
 	g_isDrag = false;											// CLEAR our mouse-dragging flag, and
 	// accumulate any final bit of mouse-dragging we did:
@@ -3636,7 +3630,6 @@ function myMouseClick(ev) {
 //    See myMouseUp(), myMouseDown() for conversions to  CVV coordinates.
 
   // STUB
-	console.log("myMouseClick() on button: ", ev.button);
 }
 
 function dragQuat(xdrag, ydrag) {
@@ -3695,7 +3688,7 @@ function myMouseDblClick(ev) {
 //    See myMouseUp(), myMouseDown() for conversions to  CVV coordinates.
 
   // STUB
-	console.log("myMouse-DOUBLE-Click() on button: ", ev.button);
+
 }
 
 function myKeyDown(kev) {
@@ -3713,9 +3706,7 @@ function myKeyDown(kev) {
 //        Revised 2/2019:  use kev.key and kev.code instead.
 //
 // Report EVERYTHING in console:
-  console.log(  "--kev.code:",    kev.code,   "\t\t--kev.key:",     kev.key,
-              "\n--kev.ctrlKey:", kev.ctrlKey,  "\t--kev.shiftKey:",kev.shiftKey,
-              "\n--kev.altKey:",  kev.altKey,   "\t--kev.metaKey:", kev.metaKey);
+
 
 // and report EVERYTHING on webpage:
 	
